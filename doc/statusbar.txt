@@ -1,0 +1,15 @@
+
+
+- (void)awakeFromNib {
+	NSStatusBar *statusBar=[NSStatusBar systemStatusBar];
+
+	NSStatusItem *statusItem=[statusBar statusItemWithLength:NSVariableStatusItemLength];
+	[statusItem retain];
+ 
+	NSImage *itemImage = [[NSImage alloc]
+	                      initWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"icon" ofType:@"png"]];
+	[statusItem setImage:itemImage];
+	[statusItem setHighlightMode:YES];
+	[statusItem setMenu:tunesMenu];
+}
+

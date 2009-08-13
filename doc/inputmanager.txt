@@ -1,0 +1,58 @@
+
+Was ist ein InputManager?
+
+- liegt als Directory in /Library/InputManagers/vImputManager/
+
+
+- zwei Bestandteile, eine Property-Datei ".../vImputManager/Info"
+und dann das eigentliche Cocoa Bundle ".../vImputManager/vImputManager.bundle"
+
+
+- die Property-Datei ist XML:
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
+  <plist version="0.9">
+  <dict>
+    <key>BundleName</key>
+    <string>vImputManager.bundle</string>
+    <key>LoadBundleOnLaunch</key>
+    <string>YES</string>
+    <key>LocalizedNames</key>
+    <dict>
+      <key>English</key>
+      <string>IncrementalSearch</string>
+    </dict>
+    <key>NoMenuEntry</key>
+    <string>YES</string>
+  </dict>
+  </plist>
+
+
+- das Bundle ist ein normales Cocoa-Bundle, es sollte "+(void)load" 
+implementieren. Um an Infos ueber die aktuelle Host-App zu kommen 
+koennen wir folgendes benutzen:
+
+  [[NSBundle mainBundle] bundleIdentifier]  => "com.apple.Safari"
+  [[NSBundle mainBundle] infoDictionary]    => other information
+
+
+- Beispiel-Bundle:
+  + (void)load {
+    NSBundle *hostApp=[NSBundle mainBundle];
+
+    // check the host app is Safari
+    NSString *bundleID=[hostApp bundleIdentifier];
+    if(![bundleID isEqualToString:@"com.apple.Safari"])
+      return;
+    
+    // check this version of Safari is supported
+    NSDictionary *infoDict=[hostApp infoDictionary];
+    float v=[[infoDict valueForKey:@"CFBundleVersion"] floatValue];
+    if(v<5528.16) {
+      // TODO: Tell the user why the plugin hasn't loaded
+      return;
+    }
+    
+    // Initialise your plugin here...
+  }
+

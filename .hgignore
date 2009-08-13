@@ -1,0 +1,10 @@
+syntax: regexp
+
+# die Builds gehoeren nicht ins Repo
+^build/.*$
+
+# alle dusseligen Swap-Dateien des vim ignorieren
+\.swp$
+
+# der Mac-Dreck
+.DS_Store$
