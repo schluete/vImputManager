@@ -6,6 +6,10 @@
 @interface BundlePrincipal: NSObject {
 }
 
+// called by the runtime after the input manager was loaded
 + (void)load;
+
+// exchange two method implementation on the given class
++ (BOOL)swizzleMethodsOfClass:(Class)clazz from:(SEL)originalSel to:(SEL)newSel;
 
 @end
