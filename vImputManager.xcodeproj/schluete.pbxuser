@@ -2,11 +2,15 @@
 {
 	089C1669FE841209C02AAC07 /* Project object */ = {
 		activeBuildConfigurationName = Debug;
-		activeTarget = 8D5B49AC048680CD000E48DA /* vImputManager */;
+		activeExecutable = 664140C810346FEE0017985F /* TestApplication */;
+		activeTarget = 664140C610346FEE0017985F /* TestApplication */;
 		addToTargets = (
-			8D5B49AC048680CD000E48DA /* vImputManager */,
+			664140C610346FEE0017985F /* TestApplication */,
 		);
 		codeSenseManager = 669CE9A210339B0D00FDAD13 /* Code sense */;
+		executables = (
+			664140C810346FEE0017985F /* TestApplication */,
+		);
 		perUserDictionary = {
 			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
 				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
@@ -58,6 +62,36 @@
 		sourceControlManager = 669CE9A110339B0D00FDAD13 /* Source Control */;
 		userBuildSettings = {
 		};
+	};
+	664140C610346FEE0017985F /* TestApplication */ = {
+		activeExec = 0;
+		executables = (
+			664140C810346FEE0017985F /* TestApplication */,
+		);
+	};
+	664140C810346FEE0017985F /* TestApplication */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = TestApplication;
+		sourceDirectories = (
+		);
 	};
 	669CE9A110339B0D00FDAD13 /* Source Control */ = {
 		isa = PBXSourceControlManager;

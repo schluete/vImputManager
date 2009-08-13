@@ -9,6 +9,14 @@
 /* Begin PBXBuildFile section */
 		66414093103451F70017985F /* NSTextView_vImputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 66414092103451F70017985F /* NSTextView_vImputManager.m */; };
 		6641409C103454580017985F /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 6641409B103454580017985F /* Logger.m */; };
+		664140F61034730E0017985F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 664140F0103472B30017985F /* InfoPlist.strings */; };
+		664140F7103473130017985F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 664140F2103472B30017985F /* MainMenu.xib */; };
+		664140F8103473240017985F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 664140EE103472970017985F /* main.m */; };
+		664140F91034732E0017985F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
+		664141071034736E0017985F /* BundlePrincipal.m in Sources */ = {isa = PBXBuildFile; fileRef = 669CE9AA10339C0900FDAD13 /* BundlePrincipal.m */; };
+		664141081034736E0017985F /* NSTextView_vImputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 66414092103451F70017985F /* NSTextView_vImputManager.m */; };
+		664141091034736E0017985F /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 6641409B103454580017985F /* Logger.m */; };
+		66414138103478750017985F /* PseudoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66414137103478750017985F /* PseudoController.m */; };
 		669CE9AB10339C0900FDAD13 /* BundlePrincipal.m in Sources */ = {isa = PBXBuildFile; fileRef = 669CE9AA10339C0900FDAD13 /* BundlePrincipal.m */; };
 		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
@@ -24,6 +32,13 @@
 		66414092103451F70017985F /* NSTextView_vImputManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTextView_vImputManager.m; sourceTree = "<group>"; };
 		6641409A103454580017985F /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
 		6641409B103454580017985F /* Logger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Logger.m; sourceTree = "<group>"; };
+		664140C710346FEE0017985F /* TestApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		664140C910346FEE0017985F /* TestApplication-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TestApplication-Info.plist"; sourceTree = "<group>"; };
+		664140EE103472970017985F /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = TestApplication/main.m; sourceTree = "<group>"; };
+		664140F1103472B30017985F /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = TestApplication/English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		664140F3103472B30017985F /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = TestApplication/English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		66414136103478750017985F /* PseudoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PseudoController.h; path = TestApplication/PseudoController.h; sourceTree = "<group>"; };
+		66414137103478750017985F /* PseudoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PseudoController.m; path = TestApplication/PseudoController.m; sourceTree = "<group>"; };
 		669CE9A910339C0900FDAD13 /* BundlePrincipal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BundlePrincipal.h; sourceTree = "<group>"; };
 		669CE9AA10339C0900FDAD13 /* BundlePrincipal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BundlePrincipal.m; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* vImputManager.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vImputManager.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -32,6 +47,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		664140C510346FEE0017985F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				664140F91034732E0017985F /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D5B49B3048680CD000E48DA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -51,6 +74,8 @@
 				089C167CFE841241C02AAC07 /* Resources */,
 				089C1671FE841209C02AAC07 /* Frameworks and Libraries */,
 				19C28FB8FE9D52D311CA2CBB /* Products */,
+				664140D31034701D0017985F /* TestApplication */,
+				664140C910346FEE0017985F /* TestApplication-Info.plist */,
 			);
 			name = vImputManager;
 			sourceTree = "<group>";
@@ -108,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				8D5B49B6048680CD000E48DA /* vImputManager.bundle */,
+				664140C710346FEE0017985F /* TestApplication.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -120,9 +146,38 @@
 			name = "Other Sources";
 			sourceTree = "<group>";
 		};
+		664140D31034701D0017985F /* TestApplication */ = {
+			isa = PBXGroup;
+			children = (
+				66414136103478750017985F /* PseudoController.h */,
+				66414137103478750017985F /* PseudoController.m */,
+				664140F0103472B30017985F /* InfoPlist.strings */,
+				664140F2103472B30017985F /* MainMenu.xib */,
+				664140EE103472970017985F /* main.m */,
+			);
+			name = TestApplication;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		664140C610346FEE0017985F /* TestApplication */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 664140CC10346FEF0017985F /* Build configuration list for PBXNativeTarget "TestApplication" */;
+			buildPhases = (
+				664140C310346FEE0017985F /* Resources */,
+				664140C410346FEE0017985F /* Sources */,
+				664140C510346FEE0017985F /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TestApplication;
+			productName = TestApplication;
+			productReference = 664140C710346FEE0017985F /* TestApplication.app */;
+			productType = "com.apple.product-type.application";
+		};
 		8D5B49AC048680CD000E48DA /* vImputManager */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1DEB913A08733D840010E9CD /* Build configuration list for PBXNativeTarget "vImputManager" */;
@@ -154,11 +209,21 @@
 			projectRoot = "";
 			targets = (
 				8D5B49AC048680CD000E48DA /* vImputManager */,
+				664140C610346FEE0017985F /* TestApplication */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		664140C310346FEE0017985F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				664140F7103473130017985F /* MainMenu.xib in Resources */,
+				664140F61034730E0017985F /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D5B49AF048680CD000E48DA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -170,6 +235,18 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		664140C410346FEE0017985F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				664141071034736E0017985F /* BundlePrincipal.m in Sources */,
+				664141081034736E0017985F /* NSTextView_vImputManager.m in Sources */,
+				664141091034736E0017985F /* Logger.m in Sources */,
+				664140F8103473240017985F /* main.m in Sources */,
+				66414138103478750017985F /* PseudoController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D5B49B1048680CD000E48DA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -189,6 +266,22 @@
 				089C167EFE841241C02AAC07 /* English */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		664140F0103472B30017985F /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				664140F1103472B30017985F /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		664140F2103472B30017985F /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				664140F3103472B30017985F /* English */,
+			);
+			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -255,6 +348,56 @@
 			};
 			name = Release;
 		};
+		664140CA10346FEF0017985F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = BUILD_FOR_TEST_APPLICATION;
+				INFOPLIST_FILE = "TestApplication-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = TestApplication;
+			};
+			name = Debug;
+		};
+		664140CB10346FEF0017985F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = BUILD_FOR_TEST_APPLICATION;
+				INFOPLIST_FILE = "TestApplication-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = TestApplication;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -272,6 +415,15 @@
 			buildConfigurations = (
 				1DEB913F08733D840010E9CD /* Debug */,
 				1DEB914008733D840010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		664140CC10346FEF0017985F /* Build configuration list for PBXNativeTarget "TestApplication" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				664140CA10346FEF0017985F /* Debug */,
+				664140CB10346FEF0017985F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
