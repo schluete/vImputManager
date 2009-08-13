@@ -15,9 +15,13 @@
   va_start(args,format);
 
   NSString *msg=[[NSString alloc] initWithFormat:format arguments:args];
+#ifdef BUILD_FOR_TEST_APPLICATION
+  NSLog(msg);
+#else
   openlog("vImputManager",LOG_CONS|LOG_PID,LOG_USER);
   syslog(LOG_NOTICE,[msg UTF8String]);
   closelog();
+#endif
 
   va_end(args);
   [msg release];
