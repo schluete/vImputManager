@@ -6,5 +6,6 @@ syntax: regexp
 # alle dusseligen Swap-Dateien des vim ignorieren
 \.swp$
 
-# der Mac-Dreck
+# der Mac- und Xcode-Dreck
 .DS_Store$
+^vImputManager.xcodeproj/schluete.*
