@@ -17,6 +17,10 @@
 		664141081034736E0017985F /* NSTextView_vImputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 66414092103451F70017985F /* NSTextView_vImputManager.m */; };
 		664141091034736E0017985F /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 6641409B103454580017985F /* Logger.m */; };
 		66414138103478750017985F /* PseudoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66414137103478750017985F /* PseudoController.m */; };
+		6641413D10347ED40017985F /* KeyHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 6641413C10347ED40017985F /* KeyHandler.m */; };
+		6641413E10347ED40017985F /* KeyHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 6641413C10347ED40017985F /* KeyHandler.m */; };
+		66414149103482910017985F /* KeyHandlerStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 66414148103482910017985F /* KeyHandlerStorage.m */; };
+		6641414A103482910017985F /* KeyHandlerStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 66414148103482910017985F /* KeyHandlerStorage.m */; };
 		669CE9AB10339C0900FDAD13 /* BundlePrincipal.m in Sources */ = {isa = PBXBuildFile; fileRef = 669CE9AA10339C0900FDAD13 /* BundlePrincipal.m */; };
 		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
@@ -39,6 +43,10 @@
 		664140F3103472B30017985F /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = TestApplication/English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		66414136103478750017985F /* PseudoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PseudoController.h; path = TestApplication/PseudoController.h; sourceTree = "<group>"; };
 		66414137103478750017985F /* PseudoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PseudoController.m; path = TestApplication/PseudoController.m; sourceTree = "<group>"; };
+		6641413B10347ED40017985F /* KeyHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyHandler.h; sourceTree = "<group>"; };
+		6641413C10347ED40017985F /* KeyHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyHandler.m; sourceTree = "<group>"; };
+		66414147103482910017985F /* KeyHandlerStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyHandlerStorage.h; sourceTree = "<group>"; };
+		66414148103482910017985F /* KeyHandlerStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyHandlerStorage.m; sourceTree = "<group>"; };
 		669CE9A910339C0900FDAD13 /* BundlePrincipal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BundlePrincipal.h; sourceTree = "<group>"; };
 		669CE9AA10339C0900FDAD13 /* BundlePrincipal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BundlePrincipal.m; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* vImputManager.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vImputManager.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,6 +115,10 @@
 				66414092103451F70017985F /* NSTextView_vImputManager.m */,
 				6641409A103454580017985F /* Logger.h */,
 				6641409B103454580017985F /* Logger.m */,
+				6641413B10347ED40017985F /* KeyHandler.h */,
+				6641413C10347ED40017985F /* KeyHandler.m */,
+				66414147103482910017985F /* KeyHandlerStorage.h */,
+				66414148103482910017985F /* KeyHandlerStorage.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -244,6 +256,8 @@
 				664141091034736E0017985F /* Logger.m in Sources */,
 				664140F8103473240017985F /* main.m in Sources */,
 				66414138103478750017985F /* PseudoController.m in Sources */,
+				6641413E10347ED40017985F /* KeyHandler.m in Sources */,
+				6641414A103482910017985F /* KeyHandlerStorage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,6 +268,8 @@
 				669CE9AB10339C0900FDAD13 /* BundlePrincipal.m in Sources */,
 				66414093103451F70017985F /* NSTextView_vImputManager.m in Sources */,
 				6641409C103454580017985F /* Logger.m in Sources */,
+				6641413D10347ED40017985F /* KeyHandler.m in Sources */,
+				66414149103482910017985F /* KeyHandlerStorage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
