@@ -23,14 +23,41 @@
   // keyDown: method implementation with our own version if 
   // this is the TextEdit.app
   if([bundleID isEqualToString:@"com.apple.TextEdit"] && version==244.0) {
-    [BundlePrincipal swizzleMethodsOfClass:[NSTextView class] 
-                                      from:@selector(keyDown:)
-                                        to:@selector(vImputManager_originalKeyDown:)];
-    [BundlePrincipal swizzleMethodsOfClass:[NSTextView class] 
-                                      from:@selector(vImputManager_keyDown:)
-                                        to:@selector(keyDown:)];
+    [self renameMethods];
     [Logger log:@"vi input mode successfully installed"];
   }
+}
+
+/**
+ * swap implementations for all methods used by our class
+ */
++ (void)renameMethods {
+  // the keyDown event handler
+  [self swizzleTextViewMethodFrom:@selector(keyDown:)
+                               to:@selector(vImputManager_originalKeyDown:)];
+  [self swizzleTextViewMethodFrom:@selector(vImputManager_keyDown:)
+                               to:@selector(keyDown:)];
+
+  // the memory dealloction call (with garbage collector)
+  [self swizzleTextViewMethodFrom:@selector(finalize) 
+                               to:@selector(vImputManager_originalFinalize)];
+  [self swizzleTextViewMethodFrom:@selector(vImputManager_finalize)
+                               to:@selector(finalize)];
+
+  // the memory dealloction call (without garbage collector)
+  [self swizzleTextViewMethodFrom:@selector(dealloc)
+                               to:@selector(vImputManager_originalDealloc)];
+  [self swizzleTextViewMethodFrom:@selector(vImputManager_dealloc)
+                               to:@selector(dealloc)];
+}
+
+/**
+ * exchange two method implementation on NSTextView
+ */
++ (BOOL)swizzleTextViewMethodFrom:(SEL)originalSel to:(SEL)newSel {
+  return [self swizzleMethodsOfClass:[NSTextView class]
+                                from:originalSel 
+                                  to:newSel];
 }
 
 /**

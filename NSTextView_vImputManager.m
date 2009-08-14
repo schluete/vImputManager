@@ -2,8 +2,11 @@
 //  Copyright 2009 pqrs.de, All rights reserved.
 
 #import "NSTextView_vImputManager.h"
-#import <time.h>
+#import "KeyHandlerStorage.h"
+#import "KeyHandler.h"
 #import "Logger.h"
+#import <time.h>
+
 
 @implementation NSTextView (vImputManager)
 
@@ -17,35 +20,44 @@
  * "$\U001B" = "vImputManagerMode:";
  */
 - (void)vImputManagerMode:(id)sender {
-  //[[ViCommandPanelController sharedViCommandPanelController] handleInputAction:self];
-  time_t ts=time(NULL);
-  [Logger log:@"the vim input mode was requested from <%@> at %ld!",sender,ts];
+  [Logger log:@"the vim input mode was requested from <%@> at %ld!",sender,time(NULL)];
 }
 
 /**
  * intercept key events to handle vi input mode.
  */
 - (void)vImputManager_keyDown:(NSEvent *)event {
-  time_t ts=time(NULL);
-  [Logger log:@"we got a key event <%@> at %ld!",event,ts];
+  BOOL eventWasNotHandled=TRUE;
 
-/*    NSEvent: 
-      type=KeyDown 
-      loc=(0,442) 
-      time=12603.9 
-      flags=0x100 
-      win=0x0 
-      winNum=1973 
-      ctxt=0x84af 
-      chars="t" 
-      unmodchars="t" 
-      repeat=0 
-      keyCode=17> at 1250175408!
-*/
-  if([event keyCode]==17)
-    [self insertText:@"Hello world!"];
-  else
+  KeyHandler *keyHandler=[[KeyHandlerStorage sharedInstance] findOrCreateHandlerFor:self];
+  if(keyHandler)
+    eventWasNotHandled=[keyHandler handleKeyDownEvent:event];
+
+  if(eventWasNotHandled)
     [self vImputManager_originalKeyDown:event];
+}
+
+/**
+ * the garbage collector invokes this method before disposing 
+ * of the memory it uses. We're overriding this method from 
+ * NSTextView to ensure that the corresponding key handler gets
+ * disposed.
+ */
+- (void)vImputManager_finalize {
+  [Logger log:@"we're being finalized %@",self];
+  [[KeyHandlerStorage sharedInstance] releaseHandlerFor:self];
+  [self vImputManager_originalFinalize];
+}
+
+/**
+ * deallocates the memory occupied by the receiver. We're overriding 
+ * this method from NSTextView to ensure that the corresponding 
+ * key handler gets disposed.
+ */
+- (void)vImputManager_dealloc {
+  [Logger log:@"we're being deallocated %@",self];
+  [[KeyHandlerStorage sharedInstance] releaseHandlerFor:self];
+  [self vImputManager_originalDealloc];
 }
 
 @end

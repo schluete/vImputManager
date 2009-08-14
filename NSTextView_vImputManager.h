@@ -12,6 +12,12 @@
 // intercept key events to handle vi input mode 
 - (void)vImputManager_keyDown:(NSEvent *)event;
 
+// the garbage collector invokes this method before disposing of the memory it uses
+- (void)vImputManager_finalize;
+
+// deallocates the memory occupied by the receiver
+- (void)vImputManager_dealloc;
+
 @end
 
 

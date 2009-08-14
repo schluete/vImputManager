@@ -9,6 +9,12 @@
 // called by the runtime after the input manager was loaded
 + (void)load;
 
+// swap implementations for all methods used by our class
++ (void)renameMethods;
+
+// exchange two method implementation on NSTextView
++ (BOOL)swizzleTextViewMethodFrom:(SEL)originalSel to:(SEL)newSel;
+
 // exchange two method implementation on the given class
 + (BOOL)swizzleMethodsOfClass:(Class)clazz from:(SEL)originalSel to:(SEL)newSel;
 
