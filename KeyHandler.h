@@ -14,6 +14,8 @@ typedef enum {
 @interface KeyHandler: NSObject {
   NSTextView *textView;
   ViMode currentMode;
+  NSMutableString *currentNumber;
+  BOOL isEnteringNumber;
 }
 
 // constructor, called to initialize the view we're working on
@@ -25,8 +27,11 @@ typedef enum {
 // change vi mode to command mode
 - (void)handleEscape;
 
+// process consecutive digits as numbers
+- (BOOL)handleDigits:(unichar)charCode;
+
 // process command mode key input
-- (void)handleCommand:(unichar)charCode modifiers:(NSUInteger)modifiers;
+- (BOOL)handleCommand:(unichar)charCode modifiers:(NSUInteger)modifiers;
 
 // handle cursor movement commands
 - (BOOL)handleMovement:(unichar)charCode modifiers:(NSUInteger)modifiers;

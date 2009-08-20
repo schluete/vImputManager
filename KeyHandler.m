@@ -3,7 +3,14 @@
 
 #import "KeyHandler.h"
 #import "Logger.h"
+#import <ctype.h>
 
+@interface KeyHandler (privateCalls)
+
+// release all resources 
+- (void)destructor;
+
+@end
 
 @implementation KeyHandler
 
@@ -14,7 +21,19 @@
   [super init]; 
   textView=aTextView;
   currentMode=Insert;
+  currentNumber=[[NSMutableString alloc] initWithCapacity:10];
   return self; 
+}
+
+/**
+ * destructor, gibt alle Resources frei. Da wir sowohl in GC-
+ * als auch in non-GC-Programmen laufen koennen fangen wir hier
+ * beide Moeglichkeiten ab
+ */
+- (void)dealloc { [self destructor]; [super dealloc]; }
+- (void)finalize { [self destructor]; [super finalize]; }
+- (void)destructor {
+  [currentNumber release];
 }
 
 /**
@@ -25,7 +44,6 @@
   unichar charCode=[chars characterAtIndex:0];
   NSUInteger modifiers=[event modifierFlags];
 
-
   // zuerst ueberpruefen wir, ob wir ein [ESC] gefunden haben
   if(charCode==0x1b) {
     [self handleEscape];
@@ -34,7 +52,9 @@
 
   // ok, es war kein Escape, sind wir im Command Mode?
   if(currentMode==Command) {
-    [self handleCommand:charCode modifiers:modifiers];
+    if(![self handleDigits:charCode])
+      if(![self handleCommand:charCode modifiers:modifiers])
+        [Logger log:@"unknown charCode found in command mode: <0x%x> (%c)",charCode,charCode];
     return FALSE;
   }
 
@@ -47,22 +67,45 @@
  */
 - (void)handleEscape {
   currentMode=Command;
+  isEnteringNumber=FALSE;
+}
+
+/**
+ * verarbeitet die Eingabe von aufeinanderfolgende Ziffern 
+ * als Zahl, die als Count fuer Commands genutzt werden kann.
+ */
+- (BOOL)handleDigits:(unichar)charCode {
+  // ist die aktuelle Eingabe ueberhaupt eine Ziffer?
+  if(!isdigit(charCode)) {
+    isEnteringNumber=FALSE;
+    return FALSE;
+  }
+
+  // wenn es die erste Ziffer der Zahl ist eine neue Zahl anfangen
+  if(!isEnteringNumber) {
+    isEnteringNumber=TRUE;
+    [currentNumber setString:@""];
+  }
+
+  // und dann die Ziffer an die Zahl anfuegen
+  [currentNumber appendFormat:@"%c",charCode];
+  return TRUE;
 }
 
 /**
  * verarbeitet die Eingabe und fuehrt entsprechende vi-commandos aus
  */
-- (void)handleCommand:(unichar)charCode modifiers:(NSUInteger)modifiers {
+- (BOOL)handleCommand:(unichar)charCode modifiers:(NSUInteger)modifiers {
   // haben wir ein insert mode command?
   if([self handleInsert:charCode modifiers:modifiers])
-    return;
+    return TRUE;
 
   // oder haben wir eine Cursor-Bewegung?
   if([self handleMovement:charCode modifiers:modifiers])
-    return;
+    return TRUE;
 
   // unbekannter Befehl, einfach ignorieren
-  [Logger log:@"unknown charCode found in command mode: <0x%x> (%c)",charCode,charCode];
+  return FALSE;
 }
 
 /**
@@ -71,6 +114,8 @@
  * In allen anderen Faellen wir FALSE als Ergebnis zurueckgegeben.
  */
 - (BOOL)handleMovement:(unichar)charCode modifiers:(NSUInteger)modifiers {
+  int count=[currentNumber intValue];
+
   if(charCode=='h') {        // cursor left
     [textView moveLeft:textView];
   }
@@ -96,8 +141,15 @@
     [textView moveWordBackward:self];
   }
   else if(charCode=='G' && modifiers&NSShiftKeyMask) {      // move to end of document
-    [textView moveToEndOfDocument:self];
     [textView moveToBeginningOfLine:self];
+    if(count==0)
+      [textView moveToEndOfDocument:self];
+    else {
+      NSRange range=[textView selectedRange];
+      NSRange line=[[textView string] lineRangeForRange: range];
+      [Logger log:@"count <%d> location <%d>, length <%d>",count,range.location,range.length];
+      [Logger log:@"line location <%d>, length <%d>",line.location,line.length];
+    }
   }
   else
     return FALSE;

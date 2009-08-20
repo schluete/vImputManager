@@ -9,3 +9,4 @@ syntax: regexp
 # der Mac- und Xcode-Dreck
 .DS_Store$
 ^vImputManager.xcodeproj/schluete.*
+Rakefile

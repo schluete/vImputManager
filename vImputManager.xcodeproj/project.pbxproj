@@ -32,6 +32,12 @@
 		089C167FFE841241C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		32DBCF630370AF2F00C91783 /* vImputManager_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vImputManager_Prefix.pch; sourceTree = "<group>"; };
+		662C4E45103A1B81003DF4B9 /* Info.template */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Info.template; path = doc/Info.template; sourceTree = "<group>"; };
+		662C4E46103A1B81003DF4B9 /* inputmanager.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = inputmanager.txt; path = doc/inputmanager.txt; sourceTree = "<group>"; };
+		662C4E47103A1B81003DF4B9 /* ipc.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ipc.txt; path = doc/ipc.txt; sourceTree = "<group>"; };
+		662C4E48103A1B81003DF4B9 /* statemachine.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; name = statemachine.rb; path = doc/statemachine.rb; sourceTree = "<group>"; };
+		662C4E49103A1B81003DF4B9 /* statusbar.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = statusbar.txt; path = doc/statusbar.txt; sourceTree = "<group>"; };
+		662C4E4A103A1B81003DF4B9 /* syslogTest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = syslogTest.c; path = doc/syslogTest.c; sourceTree = "<group>"; };
 		66414091103451F70017985F /* NSTextView_vImputManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTextView_vImputManager.h; sourceTree = "<group>"; };
 		66414092103451F70017985F /* NSTextView_vImputManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTextView_vImputManager.m; sourceTree = "<group>"; };
 		6641409A103454580017985F /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
@@ -80,6 +86,7 @@
 				08FB77AFFE84173DC02AAC07 /* Classes */,
 				32C88E010371C26100C91783 /* Other Sources */,
 				089C167CFE841241C02AAC07 /* Resources */,
+				6697F56510391758007CA72C /* Documentation */,
 				089C1671FE841209C02AAC07 /* Frameworks and Libraries */,
 				19C28FB8FE9D52D311CA2CBB /* Products */,
 				664140D31034701D0017985F /* TestApplication */,
@@ -168,6 +175,19 @@
 				664140EE103472970017985F /* main.m */,
 			);
 			name = TestApplication;
+			sourceTree = "<group>";
+		};
+		6697F56510391758007CA72C /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				662C4E45103A1B81003DF4B9 /* Info.template */,
+				662C4E46103A1B81003DF4B9 /* inputmanager.txt */,
+				662C4E47103A1B81003DF4B9 /* ipc.txt */,
+				662C4E48103A1B81003DF4B9 /* statemachine.rb */,
+				662C4E49103A1B81003DF4B9 /* statusbar.txt */,
+				662C4E4A103A1B81003DF4B9 /* syslogTest.c */,
+			);
+			name = Documentation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
