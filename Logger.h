@@ -3,7 +3,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-
 @interface Logger: NSObject {
 }
 

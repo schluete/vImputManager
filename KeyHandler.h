@@ -11,11 +11,13 @@ typedef enum {
 } ViMode;
 
 
+@class Commands;
+
+
 @interface KeyHandler: NSObject {
   NSTextView *textView;
   ViMode currentMode;
-  NSMutableString *currentNumber;
-  BOOL isEnteringNumber;
+  Commands *commands;
 }
 
 // constructor, called to initialize the view we're working on
@@ -24,6 +26,7 @@ typedef enum {
 // called by the modified text view to process an event
 - (BOOL)handleKeyDownEvent:(NSEvent *)event;
 
+/*
 // change vi mode to command mode
 - (void)handleEscape;
 
@@ -38,5 +41,6 @@ typedef enum {
 
 // handle insert mode commands
 - (BOOL)handleInsert:(unichar)charCode modifiers:(NSUInteger)modifiers;
+*/
 
 @end
