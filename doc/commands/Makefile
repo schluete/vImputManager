@@ -7,7 +7,7 @@ LDFLAGS=	-framework Foundation
 
 PROGRAM=	main
 
-SOURCES=	main.m Commands.m Logger.m
+SOURCES=	main.m Commands.m Commands_implementation.m Logger.m
 OBJECTS=	$(SOURCES:%.m=%.o)
 
 all:	$(PROGRAM)
@@ -22,5 +22,6 @@ clean:
 	rm -f $(OBJECTS) $(PROGRAM) 
 
 main.o: Commands.h Logger.h
-Commands.o: Commands.h Commands_private.h Logger.h
+Commands.o: Commands.h Commands_private.h Commands_implementation.h Logger.h
+Commands_implementation.o: Commands.h Commands_implementation.h Logger.h
 Logger.o: Logger.h
