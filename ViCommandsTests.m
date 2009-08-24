@@ -16,6 +16,13 @@
  * STFail(description, ...)
  */
 
+// originally declared privately in Commands_implementation
+@interface Commands (utilities) 
+- (NSUInteger)findStartOfLine:(NSUInteger)currentPos;
+- (NSUInteger)findEndOfLine:(NSUInteger)currentPos;
+@end
+
+
 @implementation ViCommandsTests
 
 /**
@@ -39,12 +46,87 @@
 }
 
 /**
+ * move the cursor to the end of the line
+ */
+- (void)testMoveToEndOfLine {
+  [self replaceText:@"first line\nsecond line\n   third line\nfourth line"];
+
+  // wir sind irgendwo in der Mitte irgendeiner Zeile
+  [self moveCursorTo:27];
+  [cmds processInput:'$'];
+  STAssertEquals([self cursorPosition],(NSUInteger)36,@"invalid movement");
+
+  // wir sind irgendwo in der Mitte der letzten Zeile
+  [self moveCursorTo:39];
+  [cmds processInput:'$'];
+  STAssertEquals([self cursorPosition],(NSUInteger)48,@"invalid movement");
+}
+
+
+/**
+ * move the cursor to the start of the line
+ */
+- (void)testMoveToBeginningOfLine {
+  [self replaceText:@"first line\nsecond line\n   third line\nfourth line"];
+
+  // wir sind irgendwo in der Mitte der ersten Zeile
+  [self moveCursorTo:5];
+  [cmds processInput:'0'];
+  STAssertEquals([self cursorPosition],(NSUInteger)0,@"invalid movement");
+
+  // wir sind irgendwo in der Mitte irgendeiner Zeile
+  [self moveCursorTo:16];
+  [cmds processInput:'0'];
+  STAssertEquals([self cursorPosition],(NSUInteger)11,@"invalid movement");
+
+  // wir sind irgendwo in der Mitte irgendeiner Zeile und 
+  // springen zum ersten non-whitespace-zeichen
+  [self moveCursorTo:29];
+  [cmds processInput:'^'];
+  STAssertEquals([self cursorPosition],(NSUInteger)26,@"invalid movement");
+}
+
+/**
+ * move the cursor to the right 
+ */
+- (void)testMoveCursorRight {
+  [self replaceText:@"first line\nsecond line\nthird line"];
+
+  // wenn wir am Ende des Textes sind darf nichts passieren
+  [self moveCursorTo:33];
+  [cmds processInput:'l'];
+  STAssertEquals([self cursorPosition],(NSUInteger)33,@"invalid movement");
+
+  // am Ende einer bel. Zeile ebenfalls nichts
+  [self moveCursorTo:22];
+  [cmds processInput:'l'];
+  STAssertEquals([self cursorPosition],(NSUInteger)22,@"invalid movement");
+
+  // irgendwo im Text geht's dann nach links
+  [self moveCursorTo:4];
+  [cmds processInput:'l'];
+  [cmds processInput:'l'];
+  STAssertEquals([self cursorPosition],(NSUInteger)6,@"invalid movement");
+
+  // und jetzt nochmal mit einem Count irgendwo im Text
+  [self moveCursorTo:4];
+  [cmds processInput:'3'];
+  [cmds processInput:'l'];
+  STAssertEquals([self cursorPosition],(NSUInteger)7,@"invalid movement");
+
+  // und mit Count ueber das Ende hinaus
+  [self moveCursorTo:7];
+  [cmds processInput:'6'];
+  [cmds processInput:'l'];
+  STAssertEquals([self cursorPosition],(NSUInteger)10,@"invalid movement");
+}
+
+/**
  * move the cursor to the left 
  */
 - (void)testMoveCursorLeft {
   [self replaceText:@"first line\nsecond line\nthird line"];
 
-#if 0
   // wenn wir am Anfang des Textes sind darf nichts passieren
   [self moveCursorTo:0];
   [cmds processInput:'h'];
@@ -54,7 +136,6 @@
   [self moveCursorTo:11];
   [cmds processInput:'h'];
   STAssertEquals([self cursorPosition],(NSUInteger)11,@"invalid movement");
-#endif
 
   // irgendwo im Text geht's dann nach links
   [self moveCursorTo:4];
@@ -62,7 +143,6 @@
   [cmds processInput:'h'];
   STAssertEquals([self cursorPosition],(NSUInteger)2,@"invalid movement");
 
-#if 0
   // und jetzt nochmal mit einem Count irgendwo im Text
   [self moveCursorTo:5];
   [cmds processInput:'3'];
@@ -74,9 +154,7 @@
   [cmds processInput:'6'];
   [cmds processInput:'h'];
   STAssertEquals([self cursorPosition],(NSUInteger)0,@"invalid movement");
-#endif
 }
-
 
 /**
  * find the next line break from a given position on
@@ -84,19 +162,26 @@
 - (void)testFindEndOfLine {
   [self replaceText:@"first line\nsecond line\nthird line"];
 
-  NSUInteger posOfEol=[cmds findEndOfLineAt:0 direction:Forward];
-  STAssertEquals(posOfEol,(NSUInteger)10,@"expected the first EOL at 10, found %d!",posOfEol);
-  posOfEol=[cmds findEndOfLineAt:11 direction:Forward];
-  STAssertEquals(posOfEol,(NSUInteger)22,@"expected the first EOL at 22, found %d!",posOfEol);
-  posOfEol=[cmds findEndOfLineAt:24 direction:Forward];
-  STAssertEquals(posOfEol,(NSUInteger)33,@"expected the first EOL at 33, found %d!",posOfEol);
+  NSUInteger endOfLine=[cmds findEndOfLine:0];
+  STAssertEquals(endOfLine,(NSUInteger)10,@"expected the first EOL at 10, found %d!",endOfLine);
+  endOfLine=[cmds findEndOfLine:13];
+  STAssertEquals(endOfLine,(NSUInteger)22,@"expected the first EOL at 22, found %d!",endOfLine);
+  endOfLine=[cmds findEndOfLine:24];
+  STAssertEquals(endOfLine,(NSUInteger)33,@"expected the first EOL at 33, found %d!",endOfLine);
+}
 
-  posOfEol=[cmds findEndOfLineAt:24 direction:Backward];
-  STAssertEquals(posOfEol,(NSUInteger)22,@"expected the first EOL at 22, found %d!",posOfEol);
-  posOfEol=[cmds findEndOfLineAt:15 direction:Backward];
-  STAssertEquals(posOfEol,(NSUInteger)10,@"expected the first EOL at 10, found %d!",posOfEol);
-  posOfEol=[cmds findEndOfLineAt:5 direction:Backward];
-  STAssertEquals(posOfEol,(NSUInteger)0,@"expected the first EOL at 0, found %d!",posOfEol);
+/**
+ * find the beginning of the current line
+ */
+- (void)testFindStartOfLine {
+  [self replaceText:@"first line\nsecond line\nthird line"];
+
+  NSUInteger startOfLine=[cmds findStartOfLine:25];
+  STAssertEquals(startOfLine,(NSUInteger)23,@"expected the first SOL at 22, found %d!",startOfLine);
+  startOfLine=[cmds findStartOfLine:15];
+  STAssertEquals(startOfLine,(NSUInteger)11,@"expected the first SOL at 10, found %d!",startOfLine);
+  startOfLine=[cmds findStartOfLine:5];
+  STAssertEquals(startOfLine,(NSUInteger)0,@"expected the first SOL at 0, found %d!",startOfLine);
 }
 
 /**

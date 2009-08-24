@@ -52,7 +52,7 @@
 
   // ok, es war kein Escape, sind wir im Command Mode?
   if(currentMode==Command) {
-    BOOL isControl=(modifiers && NSControlKeyMask);
+    BOOL isControl=(modifiers & NSControlKeyMask);
     [commands processInput:charCode withControl:isControl];
     return FALSE;
   }

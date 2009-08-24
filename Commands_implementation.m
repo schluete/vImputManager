@@ -23,24 +23,32 @@
 }
 
 /**
- * sucht das naechste (bzw. das vorhergende) Zeilenende ab der gegebenen 
- * Position. Es wird dabei in die uebergebene Richtung gesucht.
+ * return the position of the first character in the current line
+ * or 0 if we're at the beginning of the text
  */
-- (NSUInteger)findEndOfLineAt:(NSUInteger)pos direction:(SearchDirection)dir {
+- (NSUInteger)findStartOfLine:(NSUInteger)currentPos {
   NSString *text=[[textView textStorage] string];
   NSCharacterSet *newlines=[NSCharacterSet newlineCharacterSet];
-  for(;;) {
+  NSInteger pos=currentPos;
+  if([newlines characterIsMember:[text characterAtIndex:pos]])
+    pos--;
+  for(;pos>=0;pos--)
+    if([newlines characterIsMember:[text characterAtIndex:pos]])
+      return pos+1;
+  return 0;
+}
+
+/**
+ * return the position of the last character in the current line
+ * or the text length if we're at the end of the text
+ */
+- (NSUInteger)findEndOfLine:(NSUInteger)currentPos {
+  NSString *text=[[textView textStorage] string];
+  NSCharacterSet *newlines=[NSCharacterSet newlineCharacterSet];
+  for(NSInteger pos=currentPos;pos<[text length];pos++)
     if([newlines characterIsMember:[text characterAtIndex:pos]])
       return pos;
-    if(dir==Forward) {
-      if(++pos>=[text length])
-        return [text length];
-    }
-    else {
-      if(--pos<=0)
-        return 0;
-    }
-  }
+  return [text length];
 }
 
 @end
@@ -51,14 +59,11 @@
  * Moves the cursor one character to the left. A count repeats the effect (3.1,7.5). 
  */
 - (void)cursorLeft {
-  NSUInteger pos=[self cursorPosition],
-             prevEolPos=[self findEndOfLineAt:pos direction:Backward];
-//[Logger log:@"pos is <%d>, prevEolPos is <%d>",pos,prevEolPos];
+  NSInteger pos=[self cursorPosition],
+            startOfLine=[self findStartOfLine:pos];
   pos-=(currentCount>0 ? currentCount:1);
-//[Logger log:@"current count is <%d>, new pos is <%d>",currentCount,pos];
-  if(pos<prevEolPos)
-    pos=prevEolPos;
-//[Logger log:@"final pos is <%d>",pos];
+  if(pos<startOfLine)
+    pos=startOfLine;
   [self moveCursor:pos];
 }
 
@@ -66,11 +71,11 @@
  * Moves the cursor one character to the right. A count repeats the effect (3.1,7.5). 
  */
 - (void)cursorRight {
-  NSUInteger pos=[self cursorPosition],
-             nextEolPos=[self findEndOfLineAt:pos direction:Forward];
+  NSInteger pos=[self cursorPosition],
+            endOfLine=[self findEndOfLine:pos];
   pos+=(currentCount>0 ? currentCount:1);
-  if(pos>nextEolPos)
-    pos=nextEolPos;
+  if(pos>endOfLine)
+    pos=endOfLine;
   [self moveCursor:pos];
 }
 
@@ -92,21 +97,20 @@
 
 // move to the beginning of the current line
 - (void)beginningOfLine {
-  NSUInteger pos=[self findEndOfLineAt:[self cursorPosition] 
-                             direction:Backward];
+  NSUInteger pos=[self findStartOfLine:[self cursorPosition]];
   [self moveCursor:pos];
 }
 
 // move to the first non-whitespace character of the current line
 - (void)beginningOfLineNonWhitespace {
   NSUInteger pos=[self cursorPosition],
-             nextEolPos=[self findEndOfLineAt:pos direction:Forward],
-             startOfLine=[self findEndOfLineAt:pos direction:Backward];
+             endOfLine=[self findEndOfLine:pos],
+             startOfLine=[self findStartOfLine:pos];
 
   NSString *text=[[textView textStorage] string];
   NSRange where=[text rangeOfCharacterFromSet:[[NSCharacterSet whitespaceCharacterSet] invertedSet]
                                       options:0
-                                        range:NSMakeRange(startOfLine,nextEolPos-startOfLine)];
+                                        range:NSMakeRange(startOfLine,endOfLine-startOfLine+1)];
   if(where.location==NSNotFound)
     [self moveCursor:startOfLine];
   else
@@ -115,8 +119,7 @@
 
 // moves to the end of the current line
 - (void)endOfLine {
-  NSUInteger pos=[self findEndOfLineAt:[self cursorPosition] 
-                             direction:Forward];
+  NSUInteger pos=[self findEndOfLine:[self cursorPosition]];
   [self moveCursor:pos];
 }
 

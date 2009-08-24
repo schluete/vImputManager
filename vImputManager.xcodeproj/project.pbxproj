@@ -65,7 +65,6 @@
 		669B289A1042AE9D00864429 /* Commands_implementation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Commands_implementation.m; sourceTree = "<group>"; };
 		669B289B1042AE9D00864429 /* Commands_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Commands_private.h; sourceTree = "<group>"; };
 		669B289C1042AE9D00864429 /* Commands_table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Commands_table.h; sourceTree = "<group>"; };
-		669B28AA1042AF8400864429 /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		669B28C21042B00900864429 /* ViCommandsTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViCommandsTests.h; sourceTree = "<group>"; };
 		669B28C31042B00900864429 /* ViCommandsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViCommandsTests.m; sourceTree = "<group>"; };
 		669B29211042B5EF00864429 /* Testing.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Testing.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -116,7 +115,6 @@
 				19C28FB8FE9D52D311CA2CBB /* Products */,
 				664140D31034701D0017985F /* TestApplication */,
 				664140C910346FEE0017985F /* TestApplication-Info.plist */,
-				669B28AA1042AF8400864429 /* Tests-Info.plist */,
 				669B29221042B5EF00864429 /* Testing-Info.plist */,
 			);
 			name = vImputManager;

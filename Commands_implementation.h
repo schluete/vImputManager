@@ -9,8 +9,11 @@
 // move the cursor to the given position.
 - (void)moveCursor:(NSUInteger)pos;
 
-// find the next or previous occurencs of a line break.
-- (NSUInteger)findEndOfLineAt:(NSUInteger)pos direction:(SearchDirection)dir;
+// find the first character in the current line
+- (NSUInteger)findStartOfLine:(NSUInteger)currentPos;
+
+// find the last character in the current line
+- (NSUInteger)findEndOfLine:(NSUInteger)currentPos;
 
 @end
 
