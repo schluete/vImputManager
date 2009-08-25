@@ -272,5 +272,38 @@ second line
   [self moveCursorTo:pos];
 }
 
+/**
+ * Switches the case of the given count of characters starting from the current cursor position 
+ * to the end of the current line. Non-alphabetic characters remain unchanged.
+ *
+ * This implementation is stupid and slow as hell, but it should be good enough since we are 
+ * changing only a fairly small number of characters per call.
+ */
+- (void)switchCase {
+  // first let's determine the final position in the text to swap the case
+  int count=(currentCount>0 ? currentCount:1);
+  NSInteger startPos=[self cursorPosition],
+            endOfLine=[self findEndOfLine:startPos];
+  if(startPos+count>endOfLine)
+    count=endOfLine-startPos;
+  NSRange swapRange=NSMakeRange(startPos,count);
+
+  // then get the current content and swap its case.
+  NSString *text=[[textView textStorage] string];
+  NSMutableString *result=[[[NSMutableString alloc] initWithCapacity:swapRange.length] autorelease];
+  for(int i=0;i<count;i++) {
+    NSString *singleChar=[text substringWithRange:NSMakeRange(startPos+i,1)];
+    if([singleChar isEqualToString:[singleChar lowercaseString]])
+      [result appendString:[singleChar uppercaseString]];
+    else
+      [result appendString:[singleChar lowercaseString]];
+  }
+ 
+  // finally replace the original content with the swapped version
+  [textView replaceCharactersInRange:swapRange
+                          withString:result];
+  [self moveCursorTo:(startPos+count)];
+}
+
 @end
 

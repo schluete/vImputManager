@@ -19,13 +19,21 @@ typedef enum _SearchDirection {
   BOOL isReadingCount;
   NSMutableString *countBuffer;
   int currentCount;
+  BOOL isReadingNamedRegister;
+  unichar currentNamedRegister;
 }
 
 // constructor, called to set the view we're working on
 - (id)initWithTextView:(NSTextView *)textView;
 
+// cancel current command
+- (BOOL)escape;
+
 // process a single input character from the keyboard
 - (BOOL)processInput:(unichar)input;
+
+// process as named register identifier
+- (BOOL)processInputAsNamedRegister:(unichar)input;
 
 // process a single input character from the keyboard
 - (BOOL)processInput:(unichar)input withControl:(BOOL)isControl;

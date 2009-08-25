@@ -3,6 +3,30 @@
 
 struct {
   unichar key;
+  NSString *selectorName;
+  SEL selector;
+} ListOfOperators[]={
+  // An operator which changes the following object, replacing it with the following input text up to an <ESC>. If
+  // more than part of a single line is affected, the text which is changed away is saved in the numeric named buffers. 
+  // If only part of the current line is affected, then the last character to be changed away is marked with a$. A 
+  // count causes that many objects to be affected, thus both 3c)  and c3) change the following three sentences (7.4). 
+  {'c',@"operatorChange"},
+
+  // An operator which deletes the following object. If more than part of a line is affected, the text is saved in 
+  // the numeric buffers. A count causes that many objects to be affected; thus 3dw is the same as d3w (3.3,3.4,4.1,7.4). 
+  {'d',@"operatorDelete"},
+
+  // (yank into register, does not change the text) An operator, yanks the following object into the unnamed temporary 
+  // buffer. If preceded by a named buffer specification, "x, the text is placed in that buffer also. Text can be 
+  // recovered by a later <p> or <P> (7.4). 
+  {'y',@"operatorYank"},
+
+  // end-of-list marker, not used as a vi operator
+  {0,FALSE,nil}
+};
+
+struct {
+  unichar key;
   BOOL control;
   NSString *selectorName;
   SEL selector;
@@ -63,12 +87,49 @@ struct {
   {'e',FALSE,@"endOfWordForward"},
   {'E',FALSE,@"endOfWORDForward"},
 
+  // Switches the case of the given count of characters starting from the current cursor position to the end of 
+  // the current line. Non-alphabetic characters remain unchanged.
+  {'~',FALSE,@"switchCase"},
+
   // end-of-list marker, not used as a vi command
   {0,FALSE,nil}
 };
 
 
 /*
+
+List of operators in VIM:
+
+  g~  swap case
+  gu  make lowercase
+  gU  make uppercase
+  gq  text formatting
+  g?  ROT13 encoding
+  g@  call function set with the 'operatorfunc' option
+  zf  define a fold
+  =   filter through 'equalprg' or C-indenting if empty
+
+<   An operator which shifts lines left one shiftwidth, normally 8 spaces. Like all operators, affects lines when 
+    repeated, as in <<. Counts are passed through to the basic object, thus 3<< shifts three lines (6.6, 7.2). 
+
+>   An operator which shifts lines right one shiftwidth, normally 8 spaces. Affects lines when repeated as 
+    in >>. Counts repeat the basic object (6.6, 7.2). 
+
+!   An operator, which processes lines from the buffer with reformatting commands. Follow ! with the object to be 
+    processed, and then the command name terminated by <CR>. Doubling ! and preceding it by a count causes count 
+    lines to be filtered; otherwise the count is passed on to the object after the !. Thus 2!}fmt<CR> reformats 
+    the next two paragraphs by running them through the program "fmt". If working on LISP, the command !%grind<CR>, 
+    given at the beginning of a function, will run the text of the function through the LISP grinder (6.7,7.3). To 
+    read a file or the output of a command into the buffer :r (7.3) can be used. To simply execute a command, 
+    :! (7.3). Precedes a named buffer specification. There are named buffers 1-9 used for saving deleted text and 
+    named buffers a-z into which the user can place text (4.3, 6.3) 
+
+
+
+
+
+
+
 
 ^@  Not a command character. If typed as the first character of an insertion it is replaced with the last 
     text inserted, and the insert terminates. Only 128 characters are saved from the last insert; if more 
@@ -134,15 +195,6 @@ struct {
     name again (7.3). (The user has to do a:w before ^^ will work in this case. If he does not wish to write the 
     file he should do:e!#<CR>instead.) 
 
-!   An operator, which processes lines from the buffer with reformatting commands. Follow ! with the object to be 
-    processed, and then the command name terminated by <CR>. Doubling ! and preceding it by a count causes count 
-    lines to be filtered; otherwise the count is passed on to the object after the !. Thus 2!}fmt<CR> reformats 
-    the next two paragraphs by running them through the program "fmt". If working on LISP, the command !%grind<CR>, 
-    given at the beginning of a function, will run the text of the function through the LISP grinder (6.7,7.3). To 
-    read a file or the output of a command into the buffer :r (7.3) can be used. To simply execute a command, 
-    :! (7.3). Precedes a named buffer specification. There are named buffers 1-9 used for saving deleted text and 
-    named buffers a-z into which the user can place text (4.3, 6.3) 
-
 #   The macro character which, when followed by a number, will substitute for a function key on terminals without 
     function keys (6.9). In input mode, if this is the erase character, it will delete the last character typed 
     in input mode, and must be preceded with a \ to insert it, since it normally backs over the last input 
@@ -191,7 +243,7 @@ struct {
     minate the pattern; the cursor movestothe beginning of the last line to indicate that the search is 
     in progress; the search may then be terminated with aDELorRUB, orbybackspacing when at the 
     beginning of the bottom line, returning the cursor to its initial position. Searches normally wrap 
-    end-around to nd a string anywhere in the buffer. 
+    end-around to find a string anywhere in the buffer. 
     When used with an operator the enclosed region is normally affected. Bymentioning an offset 
     from the line matched by the pattern the user can force whole lines to be affected. Todothis a 
     pattern with a closing a closing/and then an offset+nor!nmust be given. 
@@ -210,13 +262,7 @@ struct {
 
 ;   Repeats the last single character find which used fFt or T. A count iterates the basic scan (4.1). 
 
-<   An operator which shifts lines left one shiftwidth, normally 8 spaces. Like all operators, affects lines when 
-    repeated, as in <<. Counts are passed through to the basic object, thus 3<< shifts three lines (6.6, 7.2). 
-
 =   Reindents line for LISP, as though they were typed in with lisp and autoindent set (6.8). 
-
->   An operator which shifts lines right one shiftwidth, normally 8 spaces. Affects lines when repeated as 
-    in >>. Counts repeat the basic object (6.6, 7.2). 
 
 ?   Scans backwards, the opposite of /. See the / description above for details on scanning (2.2,6.1,7.4). 
 
@@ -297,15 +343,6 @@ a   Appends arbitrary text after the current cursor position; the insert can con
     <CR> within the insert. A count causes the inserted text to be replicated, but only if the inserted text is 
     all on one line. The insertion terminates with an <ESC> (3.1,7.2). 
 
-c   An operator which changes the following object, replacing it with the following input text up to an <ESC>. If
-    more than part of a single line is affected, the text which is changed away is saved in the numeric named 
-    buffers. If only part of the current line is affected, then the last character to be changed away is marked 
-    with a$. A count causes that many objects to be affected, thus both 3c)  and c3) change the following three 
-    sentences (7.4). 
-
-d   An operator which deletes the following object. If more than part of a line is affected, the text is saved in 
-    the numeric buffers. A count causes that many objects to be affected; thus 3dw is the same as d3w (3.3,3.4,4.1,7.4). 
-
 f   Finds the first instance of the next character following the cursor on the current line. A count repeats the find (4.1). 
 
 i   Inserts text before the cursor, otherwise like a (7.2). 
@@ -337,9 +374,6 @@ u   Undoes the last change made to the current buffer. If repeated, will alterna
 x   Deletes the single character under the cursor. With a count deletes deletes that many characters forward from 
     the cursor position, but only on the current line (6.5). 
 
-y   An operator, yanks the following object into the unnamed temporary buffer. If preceded by a named buffer 
-    specification, "x, the text is placed in that buffer also. Text can be recovered by a later <p> or <P> (7.4). 
-
 z   Redraws the screen with the current line placed as specified by the following character: <CR> specifies the 
     top of the screen, <.> the center of the screen, and <!> at the bottom of the screen. A count may be given
     after the <z> and before the following character to specify the new screen size for the redraw. A count 
@@ -354,9 +388,6 @@ z   Redraws the screen with the current line placed as specified by the followin
 
 }   Advances to the beginning of the next paragraph. See <{> for the definition of paragraph (4.2,6.8,7.6). 
 
-~   Switches the case of the given count of characters starting from the current cursor position to the end of 
-    the current line. Non-alphabetic characters remain unchanged.
-    
 ^?  (or <DEL>) Interrupts the editor, returning it to command accepting state (1.6, 7.5). 
 
 */

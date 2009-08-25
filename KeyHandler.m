@@ -45,7 +45,7 @@
   NSUInteger modifiers=[event modifierFlags];
 
   // zuerst ueberpruefen wir, ob wir ein [ESC] gefunden haben
-  if(charCode==0x1b) {
+  if(currentMode!=Command && charCode==0x1b) {
     currentMode=Command;
     return FALSE;
   }

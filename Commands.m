@@ -19,11 +19,9 @@
   [aTextView retain];
   textView=aTextView;
 
-  isReadingCount=FALSE;
-  countBuffer=[[NSMutableString alloc] initWithCapacity:10];
-  currentCount=0;
-
   [self initializeCommandsTable];
+  countBuffer=[[NSMutableString alloc] initWithCapacity:10];
+  [self escape];
   return self; 
 }
 
@@ -54,6 +52,21 @@
 }
 
 /**
+ * cancel current command and (re)initialize back to basic 
+ * command mode 
+ */
+- (BOOL)escape {
+  isReadingCount=FALSE;
+  [countBuffer setString:@""];
+  currentCount=0;
+
+  isReadingNamedRegister=FALSE;
+  currentNamedRegister=0;
+
+  return TRUE;
+}
+
+/**
  * process a single input character from the keyboard
  */
 - (BOOL)processInput:(unichar)input {
@@ -65,15 +78,23 @@
  */
 - (BOOL)processInput:(unichar)input withControl:(BOOL)isControl {
 //  [Logger log:@"processing <%c> (control <%d>)",input,isControl];
+  // wenn wir ein Escape gefunden haben brechen wir die aktuelle
+  // Eingabe ab und initialisieren den Command Mode neu
+  if(input==0x0b)
+    return [self escape];
 
-  // zuerst gucken wir, ob wir vielleicht gerade in einem Count 
+  // dann gucken wir, ob wir vielleicht gerade in einem Count 
   // sind. Wenn ja handeln wir den zuerst ab.
   if(!isControl && [self processInputAsCount:input]) 
     return TRUE;
-//  [Logger log:@"current count is <%d>",currentCount];
 
-  // kein Count, also durchsuchen wir die Liste der 
-  // moeglichen Kommandos, ob irgendwas passt.
+  // dann ueberpruefen wir, ob wir vielleich ein named register
+  // fuer den folgenden Befehl haben
+  if(!isControl && [self processInputAsNamedRegister:input])
+    return TRUE;
+
+  // jetzt bleibt nur noch die die Liste der moeglichen Kommandos, 
+  // die wir nun durchsuchen ob irgendwas passt.
   for(int pos=0;ListOfCommands[pos].key!=0;pos++)
     if(ListOfCommands[pos].key==input && ListOfCommands[pos].control==isControl) {
       SEL action=ListOfCommands[pos].selector;
@@ -81,14 +102,36 @@
         [self performSelector:action];
         [textView scrollRangeToVisible:[textView selectedRange]];
         currentCount=0;
+        currentNamedRegister=0;
       }
       else
         [Logger log:@"unknown action <%s>",action];
       return TRUE;
     }
 
+  // keinen passenden Commandhandler gefunden, schade.
   [Logger log:@"invalid input, no command found for <%c> (control <%d>)",input,isControl];
   return FALSE;
+}
+
+/**
+ * ueberprueft, ob die aktuelle Eingabe die Bezeichnung fuer ein named
+ * register darstellt.
+ */
+- (BOOL)processInputAsNamedRegister:(unichar)input {
+  if(input!='"')
+    return FALSE;
+  if(isReadingNamedRegister) {
+    if((input>='a' && input<='z') || (input>='A' && input<='Z') ||
+       (input>='0' && input<='9') ||
+       input=='.' || input=='%' || input=='#' || input==':' || input=='-')
+      currentNamedRegister=input;
+    else
+      currentNamedRegister=0;
+  }
+  else
+    isReadingNamedRegister=TRUE;
+  return TRUE;
 }
 
 /**

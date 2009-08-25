@@ -98,13 +98,6 @@
   [cmds processInput:'B'];
   STAssertEquals([self cursorPosition],(NSUInteger)6,@"invalid word movement");
 
-#if 0
-require '#'yaml'
-require 'set'
-
-module ActiveRecord #:nodoc:
-#endif
-
   // word backward with special chars
   [self replaceText:@"require '#'yaml'\nrequire 'set'\n\nmodule ActiveRecord #:nodoc:\n"];
 
