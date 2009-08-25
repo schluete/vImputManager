@@ -7,7 +7,7 @@
 - (NSUInteger)cursorPosition;
 
 // move the cursor to the given position.
-- (void)moveCursor:(NSUInteger)pos;
+- (void)moveCursorTo:(NSUInteger)pos;
 
 // find the first character in the current line
 - (NSUInteger)findStartOfLine:(NSUInteger)currentPos;

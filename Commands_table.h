@@ -9,20 +9,20 @@ struct {
 } ListOfCommands[]={
   // Moves the cursor one character to the left. A count repeats the effect (3.1,7.5). 
   {'h',FALSE,@"cursorLeft"},
-  {'H',TRUE,@"cursorLeft"},
+  {'h',TRUE,@"cursorLeft"},
   {0x08,FALSE,@"cursorLeft"},
   {NSLeftArrowFunctionKey,FALSE,@"cursorLeft"},
 
   // Moves the cursor one line down in the same column. If the position does not exist, vi 
   // comes as close as possible to the same column. A count repeats the effect.
   {'j',FALSE,@"cursorDown"},
-  {'N',TRUE,@"cursorDown"},
-  {'J',TRUE,@"cursorDown"},
+  {'n',TRUE,@"cursorDown"},
+  {'j',TRUE,@"cursorDown"},
   {NSDownArrowFunctionKey,FALSE,@"cursorDown"},
 
   // Moves the cursor one line up.
   {'k',FALSE,@"cursorUp"},
-  {'P',TRUE,@"cursorUp"},
+  {'p',TRUE,@"cursorUp"},
   {NSUpArrowFunctionKey,FALSE,@"cursorUp"},
 
   // Moves the cursor one character to the right.
@@ -40,10 +40,10 @@ struct {
   {'$',FALSE,@"endOfLine"},
 
   // Forward window. A count specifies repetition. Two lines of continuity are kept if possible (2.1,6.1,7.2). 
-  {'F',TRUE,@"forwardWindow"},
+  {'f',TRUE,@"forwardWindow"},
 
   // Backward window. A count specifies repetition. Two lines of continuity are kept if possible (2.1,6.1,7.2). 
-  {'B',TRUE,@"backwardWindow"},
+  {'b',TRUE,@"backwardWindow"},
 
   // Goes to the line number given as preceding argument, or the end of the file if no preceding count is given. 
   // The screen is redrawn with the new current line in the center if necessary (7.2). 

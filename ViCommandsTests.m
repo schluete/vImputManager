@@ -62,7 +62,6 @@
   STAssertEquals([self cursorPosition],(NSUInteger)48,@"invalid movement");
 }
 
-
 /**
  * move the cursor to the start of the line
  */
@@ -157,17 +156,27 @@
 }
 
 /**
+ * was passiert, wenn wir in einem one-liner ganz am Ende sind?
+ */
+- (void)testMoveCursorLeftOnOneLiner {
+  [self replaceText:@"foobar carcdr"];
+  [self moveCursorTo:13];
+  [cmds processInput:'h'];
+  STAssertEquals([self cursorPosition],(NSUInteger)12,@"invalid movement");
+}
+
+/**
  * find the next line break from a given position on
  */
 - (void)testFindEndOfLine {
   [self replaceText:@"first line\nsecond line\nthird line"];
 
   NSUInteger endOfLine=[cmds findEndOfLine:0];
-  STAssertEquals(endOfLine,(NSUInteger)10,@"expected the first EOL at 10, found %d!",endOfLine);
+  STAssertEquals(endOfLine,(NSUInteger)10,@"invalid eol!");
   endOfLine=[cmds findEndOfLine:13];
-  STAssertEquals(endOfLine,(NSUInteger)22,@"expected the first EOL at 22, found %d!",endOfLine);
+  STAssertEquals(endOfLine,(NSUInteger)22,@"invalid eol!");
   endOfLine=[cmds findEndOfLine:24];
-  STAssertEquals(endOfLine,(NSUInteger)33,@"expected the first EOL at 33, found %d!",endOfLine);
+  STAssertEquals(endOfLine,(NSUInteger)33,@"invalid eol!");
 }
 
 /**
@@ -177,11 +186,11 @@
   [self replaceText:@"first line\nsecond line\nthird line"];
 
   NSUInteger startOfLine=[cmds findStartOfLine:25];
-  STAssertEquals(startOfLine,(NSUInteger)23,@"expected the first SOL at 22, found %d!",startOfLine);
+  STAssertEquals(startOfLine,(NSUInteger)23,@"invalid sol!");
   startOfLine=[cmds findStartOfLine:15];
-  STAssertEquals(startOfLine,(NSUInteger)11,@"expected the first SOL at 10, found %d!",startOfLine);
+  STAssertEquals(startOfLine,(NSUInteger)11,@"invalid sol!");
   startOfLine=[cmds findStartOfLine:5];
-  STAssertEquals(startOfLine,(NSUInteger)0,@"expected the first SOL at 0, found %d!",startOfLine);
+  STAssertEquals(startOfLine,(NSUInteger)0,@"invalid sol!");
 }
 
 /**

@@ -77,8 +77,11 @@
   for(int pos=0;ListOfCommands[pos].key!=0;pos++)
     if(ListOfCommands[pos].key==input && ListOfCommands[pos].control==isControl) {
       SEL action=ListOfCommands[pos].selector;
-      if([self respondsToSelector:action])
+      if([self respondsToSelector:action]) {
         [self performSelector:action];
+        [textView scrollRangeToVisible:[textView selectedRange]];
+        currentCount=0;
+      }
       else
         [Logger log:@"unknown action <%s>",action];
       return TRUE;

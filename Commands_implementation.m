@@ -18,7 +18,7 @@
 /**
  * move the cursor to the given position.
  */
-- (void)moveCursor:(NSUInteger)pos {
+- (void)moveCursorTo:(NSUInteger)pos {
   [textView setSelectedRange:NSMakeRange(pos,0)];
 }
 
@@ -28,14 +28,8 @@
  */
 - (NSUInteger)findStartOfLine:(NSUInteger)currentPos {
   NSString *text=[[textView textStorage] string];
-  NSCharacterSet *newlines=[NSCharacterSet newlineCharacterSet];
-  NSInteger pos=currentPos;
-  if([newlines characterIsMember:[text characterAtIndex:pos]])
-    pos--;
-  for(;pos>=0;pos--)
-    if([newlines characterIsMember:[text characterAtIndex:pos]])
-      return pos+1;
-  return 0;
+  NSRange lineRange=[text lineRangeForRange:NSMakeRange(currentPos,0)];
+  return lineRange.location;
 }
 
 /**
@@ -43,12 +37,24 @@
  * or the text length if we're at the end of the text
  */
 - (NSUInteger)findEndOfLine:(NSUInteger)currentPos {
+  // determine the last position of the line
   NSString *text=[[textView textStorage] string];
-  NSCharacterSet *newlines=[NSCharacterSet newlineCharacterSet];
-  for(NSInteger pos=currentPos;pos<[text length];pos++)
-    if([newlines characterIsMember:[text characterAtIndex:pos]])
-      return pos;
-  return [text length];
+  NSRange lineRange=[text lineRangeForRange:NSMakeRange(currentPos,0)];
+  NSInteger pos=lineRange.location+lineRange.length;
+
+  // if the current line has at least one char we've to 
+  // determine the "visible" end-of-line, because we don't
+  // want the cursor to be on the non-visible newline
+  // characters
+  if(lineRange.length>0) {
+    unichar charAtPos=[text characterAtIndex:pos-1];
+    BOOL isNewline=[[NSCharacterSet newlineCharacterSet] characterIsMember:charAtPos];
+    if(isNewline)
+      pos--;
+  }
+
+  // return the visible end-of-line position
+  return pos;
 }
 
 @end
@@ -64,7 +70,7 @@
   pos-=(currentCount>0 ? currentCount:1);
   if(pos<startOfLine)
     pos=startOfLine;
-  [self moveCursor:pos];
+  [self moveCursorTo:pos];
 }
 
 /**
@@ -76,14 +82,16 @@
   pos+=(currentCount>0 ? currentCount:1);
   if(pos>endOfLine)
     pos=endOfLine;
-  [self moveCursor:pos];
+  [self moveCursorTo:pos];
 }
 
 /**
  * Moves the cursor one line up.
  */
 - (void)cursorUp {
-  [Logger log:@"move cursor up %d chars",currentCount];
+  int lines=(currentCount>0 ? currentCount:1);
+  for(int i=0;i<lines;i++)
+    [textView moveUp:self];
 }
 
 /**
@@ -92,35 +100,35 @@
  * Moves the cursor one character to the left. A count repeats the effect (3.1,7.5). 
  */
 - (void)cursorDown {
-  [Logger log:@"move cursor down %d chars",currentCount];
+  int lines=(currentCount>0 ? currentCount:1);
+  for(int i=0;i<lines;i++)
+    [textView moveDown:self];
 }
 
 // move to the beginning of the current line
 - (void)beginningOfLine {
   NSUInteger pos=[self findStartOfLine:[self cursorPosition]];
-  [self moveCursor:pos];
+  [self moveCursorTo:pos];
 }
 
 // move to the first non-whitespace character of the current line
 - (void)beginningOfLineNonWhitespace {
-  NSUInteger pos=[self cursorPosition],
-             endOfLine=[self findEndOfLine:pos],
-             startOfLine=[self findStartOfLine:pos];
-
+  NSUInteger pos=[self cursorPosition];
   NSString *text=[[textView textStorage] string];
-  NSRange where=[text rangeOfCharacterFromSet:[[NSCharacterSet whitespaceCharacterSet] invertedSet]
+  NSRange lineRange=[text lineRangeForRange:NSMakeRange(pos,0)],
+          where=[text rangeOfCharacterFromSet:[[NSCharacterSet whitespaceCharacterSet] invertedSet]
                                       options:0
-                                        range:NSMakeRange(startOfLine,endOfLine-startOfLine+1)];
+                                        range:lineRange];
   if(where.location==NSNotFound)
-    [self moveCursor:startOfLine];
+    [self moveCursorTo:lineRange.location];
   else
-    [self moveCursor:where.location];
+    [self moveCursorTo:where.location];
 }
 
 // moves to the end of the current line
 - (void)endOfLine {
   NSUInteger pos=[self findEndOfLine:[self cursorPosition]];
-  [self moveCursor:pos];
+  [self moveCursorTo:pos];
 }
 
 /**
@@ -129,7 +137,18 @@
  * center if necessary (7.2). 
  */
 - (void)goToLine {
-  [Logger log:@"go to line %d",currentCount];
+  if(currentCount==0)
+    [textView moveToEndOfDocument:self];
+  else {
+    NSInteger pos=0;
+    NSString *text=[[textView textStorage] string];
+    for(int line=0;line<currentCount-1;line++) {
+      NSRange lineRange=[text lineRangeForRange:NSMakeRange(pos,0)];
+      pos=lineRange.location+lineRange.length;
+    }
+    [self moveCursorTo:pos];
+  }
+  [self beginningOfLineNonWhitespace];
 }
 
 @end
