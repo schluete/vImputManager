@@ -42,10 +42,8 @@
   NSRange lineRange=[text lineRangeForRange:NSMakeRange(currentPos,0)];
   NSInteger pos=lineRange.location+lineRange.length;
 
-  // if the current line has at least one char we've to 
-  // determine the "visible" end-of-line, because we don't
-  // want the cursor to be on the non-visible newline
-  // characters
+  // if the current line has at least one char we've to determine the "visible" end-of-line, 
+  // because we don't want the cursor to be on the non-visible newline characters
   if(lineRange.length>0) {
     unichar charAtPos=[text characterAtIndex:pos-1];
     BOOL isNewline=[[NSCharacterSet newlineCharacterSet] characterIsMember:charAtPos];
