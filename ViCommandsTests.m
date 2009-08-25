@@ -46,6 +46,134 @@
 }
 
 /**
+ * word movements backward
+ */
+- (void)testWordBackward {
+  [self replaceText:@"first line\ndef 123abc!cdef abc\nsecond line"];
+
+  // what happens at the beginning of the text?
+  [self moveCursorTo:0];
+  [cmds processInput:'b'];
+  STAssertEquals([self cursorPosition],(NSUInteger)0,@"invalid word movement");
+
+  // simple word backward, same for both <W> and <w>
+  [self moveCursorTo:8];
+  [cmds processInput:'b'];
+  STAssertEquals([self cursorPosition],(NSUInteger)6,@"invalid word movement");
+  [self moveCursorTo:8];
+  [cmds processInput:'B'];
+  STAssertEquals([self cursorPosition],(NSUInteger)6,@"invalid word movement");
+
+  // simple word backward when the cursor is at the first char of the current word
+  [self moveCursorTo:7];
+  [cmds processInput:'b'];
+  STAssertEquals([self cursorPosition],(NSUInteger)6,@"invalid word movement");
+  [self moveCursorTo:6];
+  [cmds processInput:'b'];
+  STAssertEquals([self cursorPosition],(NSUInteger)0,@"invalid word movement");
+
+  // WORD backward over special chars
+  [self moveCursorTo:24];
+  [cmds processInput:'b'];
+  STAssertEquals([self cursorPosition],(NSUInteger)22,@"invalid word movement");
+  [self moveCursorTo:24];
+  [cmds processInput:'B'];
+  STAssertEquals([self cursorPosition],(NSUInteger)15,@"invalid word movement");
+
+  // simple word backward over line endings, same for both <W> and <w>
+  [self moveCursorTo:11];
+  [cmds processInput:'b'];
+  STAssertEquals([self cursorPosition],(NSUInteger)6,@"invalid word movement");
+  [self moveCursorTo:11];
+  [cmds processInput:'B'];
+  STAssertEquals([self cursorPosition],(NSUInteger)6,@"invalid word movement");
+
+  // finally let's add a count 
+  [self moveCursorTo:17];
+  [cmds processInput:'3'];
+  [cmds processInput:'b'];
+  STAssertEquals([self cursorPosition],(NSUInteger)6,@"invalid word movement");
+  [self moveCursorTo:17];
+  [cmds processInput:'3'];
+  [cmds processInput:'B'];
+  STAssertEquals([self cursorPosition],(NSUInteger)6,@"invalid word movement");
+
+#if 0
+require '#'yaml'
+require 'set'
+
+module ActiveRecord #:nodoc:
+#endif
+
+  // word backward with special chars
+  [self replaceText:@"require '#'yaml'\nrequire 'set'\n\nmodule ActiveRecord #:nodoc:\n"];
+
+  [self moveCursorTo:17];
+  [cmds processInput:'b'];
+  STAssertEquals([self cursorPosition],(NSUInteger)15,@"invalid word movement");
+  [cmds processInput:'b'];
+  STAssertEquals([self cursorPosition],(NSUInteger)11,@"invalid word movement");
+  [cmds processInput:'b'];
+  STAssertEquals([self cursorPosition],(NSUInteger)8,@"invalid word movement");
+  [cmds processInput:'b'];
+  STAssertEquals([self cursorPosition],(NSUInteger)0,@"invalid word movement");
+}
+
+/**
+ * word movements forward
+ */
+- (void)testWordForward {
+  [self replaceText:@"first line\ndef 123abc!cdef abc\nsecond line"];
+
+  // simple word forward, same for both <W> and <w>
+  [self moveCursorTo:11];
+  [cmds processInput:'w'];
+  STAssertEquals([self cursorPosition],(NSUInteger)15,@"invalid word movement");
+  [self moveCursorTo:11];
+  [cmds processInput:'W'];
+  STAssertEquals([self cursorPosition],(NSUInteger)15,@"invalid word movement");
+
+  // WORD forward over special chars
+  [self moveCursorTo:15];
+  [cmds processInput:'w'];
+  STAssertEquals([self cursorPosition],(NSUInteger)21,@"invalid word movement");
+  [self moveCursorTo:15];
+  [cmds processInput:'W'];
+  STAssertEquals([self cursorPosition],(NSUInteger)27,@"invalid word movement");
+
+  // simple word forward over line endings, same for both <W> and <w>
+  [self moveCursorTo:6];
+  [cmds processInput:'w'];
+  STAssertEquals([self cursorPosition],(NSUInteger)11,@"invalid word movement");
+  [self moveCursorTo:6];
+  [cmds processInput:'W'];
+  STAssertEquals([self cursorPosition],(NSUInteger)11,@"invalid word movement");
+
+  // finally let's add a count 
+  [self moveCursorTo:1];
+  [cmds processInput:'3'];
+  [cmds processInput:'w'];
+  STAssertEquals([self cursorPosition],(NSUInteger)15,@"invalid word movement");
+  [self moveCursorTo:1];
+  [cmds processInput:'3'];
+  [cmds processInput:'W'];
+  STAssertEquals([self cursorPosition],(NSUInteger)15,@"invalid word movement");
+
+  // word forward with special chars
+  [self replaceText:@"require '#'yaml'\nrequire 'set'\n\nmodule ActiveRecord #:nodoc:\n"];
+
+  [self moveCursorTo:0];
+  [cmds processInput:'w'];
+  STAssertEquals([self cursorPosition],(NSUInteger)8,@"invalid word movement");
+  [cmds processInput:'w'];
+  STAssertEquals([self cursorPosition],(NSUInteger)11,@"invalid word movement");
+  [cmds processInput:'w'];
+  STAssertEquals([self cursorPosition],(NSUInteger)15,@"invalid word movement");
+  [cmds processInput:'w'];
+  STAssertEquals([self cursorPosition],(NSUInteger)17,@"invalid word movement");
+}
+
+/**
  * move the cursor to the end of the line
  */
 - (void)testMoveToEndOfLine {

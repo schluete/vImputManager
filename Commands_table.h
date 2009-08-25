@@ -49,7 +49,19 @@ struct {
   // The screen is redrawn with the new current line in the center if necessary (7.2). 
   {'G',FALSE,@"goToLine"},
 
-    
+  // Backs up to the beginning of a word in the current line. A word is a sequence of alphanumerics, or a sequence 
+  // of special characters (<B>: words are composed of non-blank sequences). A count repeats the effect (2.4). 
+  {'b',FALSE,@"wordBackward"},
+  {'B',FALSE,@"WORDBackward"},
+
+  // Advances to the beginning of the next word, as defined by <b> (or <B>) (2.4).
+  {'w',FALSE,@"wordForward"},
+  {'W',FALSE,@"WORDForward"},
+
+  // Advances to the end of the next word, defined as for <b> and <w> (or <B> and <W>). A count 
+  // repeats the effect (2.4, 3.1). 
+  {'e',FALSE,@"endOfWordForward"},
+  {'E',FALSE,@"endOfWORDForward"},
 
   // end-of-list marker, not used as a vi command
   {0,FALSE,nil}
@@ -213,14 +225,9 @@ struct {
 
 A   Appends at the end of line, a synonym for $a (7.2). 
 
-B   Backs up a word, where words are composed of non-blank sequences, placing the cursor at the beginning of 
-    the word. A count repeats the effect (2.4). 
-
 C   Changes the rest of the text on the current line; a synonym for c$. 
 
 D   Deletes the rest of the text on the current line; a synonym for d$. 
-
-E   Moves forward to the end of a word, defined as blanks and non-blanks, like B and W. A count repeats the effect. 
 
 F   Finds a single character, backwards in the current line. A count repeats this search that many times (4.1). 
 
@@ -263,9 +270,6 @@ T   Takes a single following character, locates the character before the cursor 
 
 U   Restores the current line to its state before the user started changing it (3.5). 
 
-W   Moves forward to the beginning of a word in the current line, where words are defined as sequences of blank/ 
-    non-blank characters. A count repeats the effect (2.4). 
-
 X   Deletes the character before the cursor. A count repeats the effect, but only characters on the current line 
     are deleted. 
 
@@ -293,9 +297,6 @@ a   Appends arbitrary text after the current cursor position; the insert can con
     <CR> within the insert. A count causes the inserted text to be replicated, but only if the inserted text is 
     all on one line. The insertion terminates with an <ESC> (3.1,7.2). 
 
-b   Backs up to the beginning of a word in the current line. A word is a sequence of alphanumerics, or a sequence 
-    of special characters. A count repeats the effect (2.4). 
-
 c   An operator which changes the following object, replacing it with the following input text up to an <ESC>. If
     more than part of a single line is affected, the text which is changed away is saved in the numeric named 
     buffers. If only part of the current line is affected, then the last character to be changed away is marked 
@@ -304,8 +305,6 @@ c   An operator which changes the following object, replacing it with the follow
 
 d   An operator which deletes the following object. If more than part of a line is affected, the text is saved in 
     the numeric buffers. A count causes that many objects to be affected; thus 3dw is the same as d3w (3.3,3.4,4.1,7.4). 
-
-e   Advances to the end of the next word, defined as for <b> and <w>. A count repeats the effect (2.4, 3.1). 
 
 f   Finds the first instance of the next character following the cursor on the current line. A count repeats the find (4.1). 
 
@@ -334,8 +333,6 @@ t   Advances the cursor up to the character before the next character typed. Mos
 u   Undoes the last change made to the current buffer. If repeated, will alternate between these two states, thus 
     is its own inverse. When used after an insert which inserted text on more than one line, the lines are saved
     in the numeric named buffers (3.5). 
-
-w   Advances to the beginning of the next word, as defined by <b> (2.4).
 
 x   Deletes the single character under the cursor. With a count deletes deletes that many characters forward from 
     the cursor position, but only on the current line (6.5). 

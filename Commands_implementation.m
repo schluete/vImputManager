@@ -151,5 +151,126 @@
   [self beginningOfLineNonWhitespace];
 }
 
+/**
+ * Advances to the beginning of the next word. A word is a sequence of alphanumerics, 
+ * or a sequence of special characters. A count repeats the effect (2.4). 
+ *
+first line
+def 123a_bc!cdef abc
+second line
+ */
+- (void)wordForward {
+  NSMutableCharacterSet *wordChars=[[[NSMutableCharacterSet alloc] init] autorelease];
+  [wordChars formUnionWithCharacterSet:[NSCharacterSet alphanumericCharacterSet]];
+  [wordChars addCharactersInString:@"_"];
+  [self wordForwardWithWordCharacters:wordChars];
+}
+
+/**
+ * Advances to the beginning of the next word. Words are composed of non-blank 
+ * sequences. A count repeats the effect (2.4). 
+ */
+- (void)WORDForward {
+  NSCharacterSet *wordChars=
+    [[NSCharacterSet whitespaceAndNewlineCharacterSet] invertedSet];
+  [self wordForwardWithWordCharacters:wordChars];
+}
+
+/**
+ * Used internally, advances to the beginning of the next word. Words are composed 
+ * of the characters given in the wordChars set. A count repeats the effect
+ */
+- (void)wordForwardWithWordCharacters:(NSCharacterSet *)wordChars {
+  NSCharacterSet *whitespaceChars=[NSCharacterSet whitespaceAndNewlineCharacterSet];
+  NSString *text=[[textView textStorage] string];
+  NSInteger pos=[self cursorPosition];
+  int count=(currentCount>0 ? currentCount:1);
+  for(int i=0;i<count;i++) {
+    // let's find the end of the current word. If the current char is a word char then we're
+    // searching only for word chars, otherwise we take the current char as a special char and
+    // are looking only for special chars
+    unichar currChar=[text characterAtIndex:pos];
+    if([wordChars characterIsMember:currChar])
+      while(pos<[text length] &&
+            [wordChars characterIsMember:[text characterAtIndex:pos]])
+        pos++;
+    else
+      while(pos<[text length] &&
+            ![wordChars characterIsMember:[text characterAtIndex:pos]] &&
+            ![whitespaceChars characterIsMember:[text characterAtIndex:pos]])
+        pos++;
+
+    // then move over the whitespaces after the current word
+    while(pos<[text length] &&
+          [whitespaceChars characterIsMember:[text characterAtIndex:pos]])
+      pos++;
+  }
+
+  // if we're at the beginning or the end of the text modify position
+  if(pos==[text length])
+    pos=[text length]-1;
+  if(pos<0)
+    pos=0;
+  [self moveCursorTo:pos];
+}
+
+/**
+ * Backs up to the beginning of a word in the current line. A word is a sequence of 
+ * alphanumerics, or a sequence of special characters. A count repeats the effect (2.4). 
+ */
+- (void)wordBackward {
+  NSMutableCharacterSet *wordChars=[[[NSMutableCharacterSet alloc] init] autorelease];
+  [wordChars formUnionWithCharacterSet:[NSCharacterSet alphanumericCharacterSet]];
+  [wordChars addCharactersInString:@"_"];
+  [self wordBackwardWithWordCharacters:wordChars];
+}
+
+/**
+ * Backs up to the beginning of a word in the current line. Words are composed of 
+ * non-blank sequences. A count repeats the effect (2.4). 
+ */
+- (void)WORDBackward {
+  NSCharacterSet *wordChars=
+    [[NSCharacterSet whitespaceAndNewlineCharacterSet] invertedSet];
+  [self wordBackwardWithWordCharacters:wordChars];
+}
+
+/**
+ * Used internally, backs up to the beginning of the previous word. Words are composed 
+ * of the characters given in the wordChars set. A count repeats the effect
+ */
+- (void)wordBackwardWithWordCharacters:(NSCharacterSet *)wordChars {
+  NSCharacterSet *whitespaceChars=[NSCharacterSet whitespaceAndNewlineCharacterSet];
+
+  NSString *text=[[textView textStorage] string];
+  NSInteger pos=[self cursorPosition]-1;
+  int count=(currentCount>0 ? currentCount:1);
+  for(int i=0;i<count;i++) {
+    // move over the whitespaces before the current word
+    while(pos>=0 && [whitespaceChars characterIsMember:[text characterAtIndex:pos]])
+      pos--;
+    if(pos<0)
+      break;
+
+    // then let's find the beginning of the current word. If the current char is a word char 
+    // then we're searching only for word chars, otherwise we take the current char as a 
+    // special char and are looking only for those.
+    unichar currChar=[text characterAtIndex:pos];
+    if([wordChars characterIsMember:currChar])
+      while(pos>=0 && [wordChars characterIsMember:[text characterAtIndex:pos]])
+        pos--;
+    else
+      while(pos>=0 &&
+            ![wordChars characterIsMember:[text characterAtIndex:pos]] &&
+            ![whitespaceChars characterIsMember:[text characterAtIndex:pos]])
+        pos--;
+  }
+
+  // move the cursor to the position
+  if(pos<(NSInteger)[text length]-1)
+    pos++;
+  [self moveCursorTo:pos];
+}
+
 @end
 

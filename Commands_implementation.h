@@ -43,4 +43,22 @@
 // go to a specific line or to the end of the file
 - (void)goToLine;
 
+// move a word forward in the current line
+- (void)wordForward;
+
+// move a word forward in the current line
+- (void)WORDForward;
+
+// Used internally, advances to the beginning of the next word
+- (void)wordForwardWithWordCharacters:(NSCharacterSet *)wordChars;
+
+// move a word bacward in the current line
+- (void)wordBackward;
+
+// move a word bacward in the current line
+- (void)WORDBackward;
+
+// Used internally, advances to the beginning of the next word
+- (void)wordBackwardWithWordCharacters:(NSCharacterSet *)wordChars;
+
 @end
