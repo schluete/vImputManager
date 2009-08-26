@@ -5,6 +5,12 @@
 
 @interface Commands (utilities) 
 
+// true if the given text is a multiline text, false otherwise
+- (BOOL)hasMultipleLines:(NSString *)text inRange:(NSRange)range;
+
+// store the given text into a register
+- (void)storeText:(NSString *)text intoRegister:(unichar)namedRegister;
+
 // return the current cursor position
 - (NSUInteger)cursorPosition;
 
@@ -16,6 +22,9 @@
 
 // find the last character in the current line
 - (NSUInteger)findEndOfLine:(NSUInteger)currentPos;
+
+// return the real end of line position
+- (NSUInteger)findRealEndOfLine:(NSUInteger)currentPos;
 
 @end
 
@@ -62,5 +71,18 @@
 
 // Used internally, advances to the beginning of the next word
 - (void)wordBackwardWithWordCharacters:(NSCharacterSet *)wordChars;
+
+// go to insert mode at current cursor position.
+- (void)insertMode;
+
+// Appends arbitrary text after the current cursor position
+- (void)insertModeAfterCursor;
+
+// Finds the first instance of the next character following the cursor on the current line
+- (void)findCharacter;
+
+// Advances the cursor up to the character before the next character typed
+- (void)findAndStopBeforeCharacter;
+
 
 @end

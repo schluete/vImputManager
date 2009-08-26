@@ -44,21 +44,15 @@
   unichar charCode=[chars characterAtIndex:0];
   NSUInteger modifiers=[event modifierFlags];
 
-  // zuerst ueberpruefen wir, ob wir ein [ESC] gefunden haben
-  if(_currentMode!=Command && charCode==0x1b) {
-    _currentMode=Command;
-    return FALSE;
-  }
+  // if we're not in command mode and the current input isn't 
+  // an ESC we're not going to handle this input by ourself
+  if([_commands viMode]!=Command && charCode!=0x1b)
+    return TRUE; 
 
-  // ok, es war kein Escape, sind wir im Command Mode?
-  if(_currentMode==Command) {
-    BOOL isControl=(modifiers & NSControlKeyMask)>0;
-    [_commands processInput:charCode withControl:isControl];
-    return FALSE;
-  }
-
-  // nein, kein Command Mode, also auch nix fuer unseren vi
-  return TRUE;
+  // otherwise we're handling this as a vi command input
+  BOOL isControl=(modifiers & NSControlKeyMask)>0;
+  [_commands processInput:charCode withControl:isControl];
+  return FALSE;
 }
 
 @end

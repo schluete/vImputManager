@@ -7,6 +7,42 @@
 @implementation Commands (utilities)
 
 /**
+ * !!!METHOD ONLY FOR UNIT TESTING!!!
+ * returns the current named register for the current command.
+ */
+- (unichar)currentNamedRegister {
+  return _currentNamedRegister;
+}
+
+/**
+ * !!!METHOD ONLY FOR UNIT TESTING!!!
+ * returns the content of the delete buffer
+ */
+- (NSString *)temporaryBuffer {
+  return _temporaryBuffer;
+}
+
+/**
+ * true if the given text is a multiline text, false otherwise
+ */
+- (BOOL)hasMultipleLines:(NSString *)text inRange:(NSRange)range {
+    NSRange isMultiline=[text rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]
+                                              options:0
+                                                range:range];
+    return isMultiline.location!=NSNotFound;
+}
+
+/**
+ * store the given text into a named register. If the name of the 
+ * register is invalid, nothing will be stored and the call is a NOP.
+ */
+- (void)storeText:(NSString *)text intoRegister:(unichar)namedRegister {
+  if(namedRegister==0)  // do we have a valid register?
+    return;
+  [Logger log:@"register handling for register <%c> is not yet implemented!",namedRegister];
+}
+
+/**
  * return the current cursor position
  */
 - (NSUInteger)cursorPosition {
@@ -52,6 +88,16 @@
 
   // return the visible end-of-line position
   return pos;
+}
+
+/**
+ * return the real end of line position including all white spaces and
+ * newline characters at the end of the current line
+ */
+- (NSUInteger)findRealEndOfLine:(NSUInteger)currentPos {
+  NSString *text=[[_textView textStorage] string];
+  NSRange lineRange=[text lineRangeForRange:NSMakeRange(currentPos,0)];
+  return lineRange.location+lineRange.length;
 }
 
 @end
@@ -302,6 +348,83 @@
   [_textView replaceCharactersInRange:swapRange
                           withString:result];
   [self moveCursorTo:(startPos+count)];
+}
+
+/**
+ * go to insert mode at current cursor position.
+ */
+- (void)insertMode {
+  _viMode=Insert;
+}
+
+/**
+ * Appends arbitrary text after the current cursor position; the insert can continue onto multiple lines by using
+ * <CR> within the insert. A count causes the inserted text to be replicated, but only if the inserted text is 
+ * all on one line. The insertion terminates with an <ESC> (3.1,7.2). 
+ */
+- (void)insertModeAfterCursor {
+  [self cursorRight];
+  _viMode=Insert;
+}
+
+/**
+ * Finds the first instance of the next character following the cursor on the current 
+ * line. A count repeats the find (4.1). 
+ */
+- (void)findCharacter {
+  // we need a second char
+  if(!_waitingForFurtherInput) {
+    _waitingForFurtherInput=TRUE;
+    return;
+  }
+
+  // otherwise we got our second char, let's find it in the current lien
+  _waitingForFurtherInput=FALSE;
+  int startPos=[self cursorPosition],
+      endPos=[self findEndOfLine:startPos],
+      foundAt=NSNotFound;
+  if(endPos<=startPos)
+    return;
+  NSString *text=[[_textView textStorage] string];
+  int count=(_currentCount>0 ? _currentCount:1);
+  for(int i=0;i<count;i++) {
+    NSRange pos=[text rangeOfString:[NSString stringWithCharacters:&_currentInput length:1]
+                            options:0
+                              range:NSMakeRange(startPos,endPos-startPos)];
+    if((foundAt=pos.location)==NSNotFound)
+      break;
+    startPos=foundAt+1;
+    if(startPos>=[text length]) {
+      foundAt=NSNotFound;
+      break;
+    }
+  }
+
+  // if we found the character move to cursor to it
+  if(foundAt!=NSNotFound) {
+    // strange vi speciality: if we're using this command inside an operator, we
+    // have to include one more char to ensure we get a vi compatible range of 
+    // characters for the operator to work on
+    if(_operatorState!=NoOperator) {
+      if(++foundAt>=[text length])
+        foundAt--;
+    }
+  
+    // finally let's move the cursor
+    [self moveCursorTo:foundAt];
+  }
+}
+
+/**
+ * Advances the cursor up to the character before the next character typed. Most useful with operators such as
+ * <d> and <c> to delete the characters up to a following character. One can use <.> to delete more if this 
+ * doesn’t delete enough the first time (4.1). 
+ */
+- (void)findAndStopBeforeCharacter {
+  int currPos=[self cursorPosition];
+  [self findCharacter];
+  if([self cursorPosition]!=currPos)
+    [self cursorLeft];
 }
 
 @end

@@ -18,9 +18,11 @@
 
   [aTextView retain];
   _textView=aTextView;
+  _viMode=Command;
 
   [self initializeCommandsTable];
   _countBuffer=[[NSMutableString alloc] initWithCapacity:10];
+  _temporaryBuffer=[[NSMutableString alloc] initWithCapacity:10];
   [self escape];
   return self; 
 }
@@ -34,6 +36,7 @@
 - (void)finalize { [self destructor]; [super finalize]; }
 - (void)destructor {
   [_countBuffer release];
+  [_temporaryBuffer release];
   [_textView release];
 }
 
@@ -61,10 +64,16 @@
 }
 
 /**
- * cancel current command and (re)initialize back to basic 
- * command mode 
+ * return the current mode we're in
  */
-- (BOOL)escape {
+- (ViMode)viMode {
+  return _viMode;
+}
+
+/**
+ * cancel current command and (re)initialize back to basic command mode 
+ */
+- (void)escape {
   _isReadingCount=FALSE;
   [_countBuffer setString:@""];
   _currentCount=0;
@@ -72,62 +81,168 @@
   _isReadingNamedRegister=FALSE;
   _currentNamedRegister=0;
 
-  return TRUE;
+  _operatorState=NoOperator;
+  _currentOperator=nil;
+  _operatorCount=0;
+
+  _viMode=Command;
+  _currentInput=0;
+  _waitingForFurtherInput=FALSE;
+  _furtherInputHandler=nil;
 }
 
 /**
- * process a single input character from the keyboard
+ * process a single input character from the keyboard.
  */
-- (BOOL)processInput:(unichar)input {
-  return [self processInput:input withControl:FALSE];
+- (void)processInput:(unichar)input {
+  [self processInput:input withControl:FALSE];
 }
 
 /**
- * process a single input character from the keyboard
+ * process a single input character from the keyboard.
  */
-- (BOOL)processInput:(unichar)input withControl:(BOOL)isControl {
+- (void)processInput:(unichar)input withControl:(BOOL)isControl {
+  _currentInput=input;
 //[Logger log:@"processing <%c> (%x) (control <%d>)",input,input,isControl];
 
   // wenn wir ein Escape gefunden haben brechen wir die aktuelle
   // Eingabe ab und initialisieren den Command Mode neu
-  if(input==0x1b)
-    return [self escape];
+  if(!isControl && input==0x1b) {
+    [self escape];
+    return;
+  }
+
+  // wenn wir nicht im Command-Mode sind brauchen wir den Rest gar nicht
+  // erst auszuprobieren, da wir nur mit einem Escape in Selbigen kommen koennen.
+  if(_viMode!=Command)
+    return;
+
+  // if we have pending command waiting for further input let's call 
+  // that command first before handing the input over to other commands
+  if(_waitingForFurtherInput) {
+    [self callCommandHandler:_furtherInputHandler];
+    return;
+  }
 
   // dann gucken wir, ob wir vielleicht gerade in einem Count 
   // sind. Wenn ja handeln wir den zuerst ab.
   if(!isControl && [self processInputAsCount:input]) 
-    return TRUE;
+    return;
 
   // dann ueberpruefen wir, ob wir vielleich ein named register
   // fuer den folgenden Befehl haben
   if(!isControl && [self processInputAsNamedRegister:input])
-    return TRUE;
+    return;
 
   // nun gucken wir doch mal, ob wir einen Operator gefunden haben
-  for(int pos=0;ListOfOperators[pos].key!=0;pos++)
-    if(ListOfOperators[pos].key==input) {
-      SEL action=ListOfOperators[pos].selector;
-      // rufen wir diesen Operator gerade zum zweiten Mal auf?
-     
-      [self performSelector:action];
-      return TRUE;
-    }
+  if(!isControl && [self processInputAsOperator:input])
+    return;
 
   // jetzt bleibt nur noch die die Liste der moeglichen Kommandos, 
   // die wir nun durchsuchen ob irgendwas passt.
-  for(int pos=0;ListOfCommands[pos].key!=0;pos++)
-    if(ListOfCommands[pos].key==input && ListOfCommands[pos].control==isControl) {
-      SEL action=ListOfCommands[pos].selector;
-      [self performSelector:action];
-      [_textView scrollRangeToVisible:[_textView selectedRange]];
-      _currentCount=0;
-      _currentNamedRegister=0;
-      return TRUE;
-    }
+  if([self processInputAsCommand:input withControl:isControl]) {
+    return;
+  }
 
   // keinen passenden Commandhandler gefunden, schade.
   [Logger log:@"invalid input, no command or operator found for <%c> (control <%d>)",input,isControl];
+  return;
+}
+
+/**
+ * loops throught the list of command handlers and searches the matching 
+ * one. If a handler was found the method will return TRUE, otherwise FALSE
+ * will be returned
+ */
+- (BOOL)processInputAsCommand:(unichar)input withControl:(BOOL)isControl {
+  for(int pos=0;ListOfCommands[pos].key!=0;pos++)
+    if(ListOfCommands[pos].key==input && ListOfCommands[pos].control==isControl) {
+      // if we're in an operator and if we got an operator count we want to 
+      // execute the movement operatorCount * commandCount times.
+      if(_operatorState!=NoOperator && _operatorCount>0)
+        _currentCount=(_currentCount>0 ? _currentCount:1)*_operatorCount;
+
+      // let's call the command handler
+      SEL action=ListOfCommands[pos].selector;
+      [self callCommandHandler:action];
+      return TRUE;
+    }
+
+  // no valid command handler found for this input
   return FALSE;
+}
+
+/**
+ * call the given command handler and clean up afterwards
+ */
+- (void)callCommandHandler:(SEL)action {
+  int cursorPos=[self cursorPosition];
+  [self performSelector:action];
+  if(!_waitingForFurtherInput) {
+    // let's clean up after the command
+    if(cursorPos!=[self cursorPosition])
+      [_textView scrollRangeToVisible:[_textView selectedRange]];
+    _currentCount=0;
+    _furtherInputHandler=nil;
+
+    // do we still have a pending operator? 
+    if(_operatorState!=NoOperator)
+      [self processOperatorAfterCommand];
+    _currentNamedRegister=0;
+  }
+  else
+    _furtherInputHandler=action;
+}
+
+/**
+ * versucht die aktuelle Eingabe als Operator zu verarbeiten
+ */
+- (BOOL)processInputAsOperator:(unichar)input {
+  for(int pos=0;ListOfOperators[pos].key!=0;pos++)
+    if(ListOfOperators[pos].key==input) {
+      SEL action=ListOfOperators[pos].selector;
+
+      // sind wir bereits im Operator-Mode und rufen diesen Operator zum zweiten Mal auf?
+      if(_currentOperator) {
+        if(_currentOperator==action) {
+          _operatorState=SecondTime;
+          [self performSelector:action];
+          _operatorState=NoOperator;
+          _currentOperator=nil;
+          _operatorCount=0;
+        }
+        else 
+          [self escape];    // fehlerhafter Operator-Call
+      }
+
+      // nein, zum ersten Mal, dann einfach aufrufen
+      else {
+        _currentOperator=action;
+        _operatorState=FirstTime;
+        _operatorCount=_currentCount;
+        _currentCount=0;
+        [self performSelector:action];
+      }
+
+      // nach einem Operator machen wir nix mehr 
+      return TRUE;
+    }
+
+  // die Eingabe war wohl eher kein Operator
+  return FALSE;
+}
+
+/**
+ * called after a command was executed with an active operator.
+ * Executes the operator action a second time, then clear the 
+ * current operator
+ */
+- (void)processOperatorAfterCommand {
+  _operatorState=AfterCommand;
+  [self performSelector:_currentOperator];
+  _operatorState=NoOperator;
+  _currentOperator=nil;
+  _operatorCount=0;
 }
 
 /**
@@ -135,18 +250,20 @@
  * register darstellt.
  */
 - (BOOL)processInputAsNamedRegister:(unichar)input {
-  if(input!='"')
-    return FALSE;
   if(_isReadingNamedRegister) {
     if((input>='a' && input<='z') || (input>='A' && input<='Z') ||
        (input>='0' && input<='9') ||
        input=='.' || input=='%' || input=='#' || input==':' || input=='-')
       _currentNamedRegister=input;
-    else
+    else {
       _currentNamedRegister=0;
+    }
+    _isReadingNamedRegister=FALSE;
   }
-  else
+  else if(input=='"')
     _isReadingNamedRegister=TRUE;
+  else
+    return FALSE;
   return TRUE;
 }
 
@@ -161,6 +278,7 @@
   if(![[NSCharacterSet decimalDigitCharacterSet] characterIsMember:input]) {
     if(_isReadingCount) {
       _currentCount=[_countBuffer intValue];
+      [_countBuffer setString:@""];
       _isReadingCount=FALSE;
     }
     return FALSE;

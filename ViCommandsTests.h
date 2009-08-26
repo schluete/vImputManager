@@ -7,8 +7,8 @@
 @class Commands;
 
 @interface ViCommandsTests: SenTestCase {
-  NSTextView *textView;
-  Commands *cmds;
+  NSTextView *_textView;
+  Commands *_cmds;
 }
 
 // move the cursor to a specific position in the text
@@ -25,5 +25,8 @@
 
 // return the current cursor position
 - (NSUInteger)cursorPosition;
+
+// return the content of the given line
+- (NSString *)line:(int)lineNo;
 
 @end

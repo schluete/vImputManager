@@ -3,20 +3,10 @@
 
 #import <Cocoa/Cocoa.h>
 
-
-// the possible vi modes the input is in
-typedef enum {
-  Insert=0,
-  Command=1,
-} ViMode;
-
-
 @class Commands;
-
 
 @interface KeyHandler: NSObject {
   NSTextView *_textView;
-  ViMode _currentMode;
   Commands *_commands;
 }
 

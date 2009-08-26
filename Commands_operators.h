@@ -14,4 +14,7 @@
 // yank the following object into a register
 - (void)operatorYank;
 
+// determine the range an operator should work on
+- (NSRange)determineOperatorRange;
+
 @end

@@ -93,6 +93,23 @@ struct {
   // the current line. Non-alphabetic characters remain unchanged.
   {'~',FALSE,@"switchCase"},
 
+  // Inserts text before the cursor, otherwise like a (7.2). 
+  {'i',FALSE,@"insertMode"},
+
+  // Appends arbitrary text after the current cursor position; the insert can continue onto multiple lines by using
+  // <CR> within the insert. A count causes the inserted text to be replicated, but only if the inserted text is 
+  // all on one line. The insertion terminates with an <ESC> (3.1,7.2). 
+  {'a',FALSE,@"insertModeAfterCursor"},
+
+  // Finds the first instance of the next character following the cursor on the current line. A count repeats the find (4.1). 
+  {'f',FALSE,@"findCharacter"},
+
+  // Advances the cursor up to the character before the next character typed. Most useful with operators such as
+  // <d> and <c> to delete the characters up to a following character. One can use <.> to delete more if this 
+  // doesn’t delete enough the first time (4.1). 
+  {'t',FALSE,@"findAndStopBeforeCharacter"},
+
+
   // end-of-list marker, not used as a vi command
   {0,FALSE,nil}
 };
@@ -341,14 +358,6 @@ ZZ  Exits the editor. (Same as :x<CR>.) If any changes have been made, the buffe
     the exact marked place to the current position within the line; if using ', the operation takes place over
     complete lines (2.2, 5.3). 
 
-a   Appends arbitrary text after the current cursor position; the insert can continue onto multiple lines by using
-    <CR> within the insert. A count causes the inserted text to be replicated, but only if the inserted text is 
-    all on one line. The insertion terminates with an <ESC> (3.1,7.2). 
-
-f   Finds the first instance of the next character following the cursor on the current line. A count repeats the find (4.1). 
-
-i   Inserts text before the cursor, otherwise like a (7.2). 
-
 m   Marks the current position of the cursor in the mark register which is specified by the next character a-z.
     The user can return to this position or use it with an operator using <`> or <'> (5.3). 
 
@@ -364,10 +373,6 @@ r   Replaces the single character at the cursor with a single character typed. T
 
 s   Changes the single character under the cursor to the text which follows up to an <ESC>; given a count, that 
     many characters from the current line are changed. The last character to be changed is marked with $ as in <c> (3.2). 
-
-t   Advances the cursor up to the character before the next character typed. Most useful with operators such as
-    <d> and <c> to delete the characters up to a following character. One can use <.> to delete more if this 
-    doesn’tdelete enough the first time (4.1). 
 
 u   Undoes the last change made to the current buffer. If repeated, will alternate between these two states, thus 
     is its own inverse. When used after an insert which inserted text on more than one line, the lines are saved
