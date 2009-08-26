@@ -149,6 +149,17 @@
 }
 
 /**
+ * places the cursor on the character in the column specified by the count (7.1, 7.2). 
+ */
+- (void)cursorToColumn {
+  int pos=[self cursorPosition],
+      startOfLine=[self findStartOfLine:pos],
+      endOfLine=[self findEndOfLine:pos],
+      newPos=startOfLine+_currentCount;
+  [self moveCursorTo:(newPos>endOfLine ? endOfLine:newPos)];
+}
+
+/**
  * move to the beginning of the current line
  */
 - (void)beginningOfLine {
@@ -447,6 +458,20 @@
     // finally let's move the cursor
     [self moveCursorTo:foundAt];
   }
+}
+
+/**
+ * Finds a single character, backwards in the current line. 
+ * A count repeats this search that many times (4.1). 
+ */
+- (void)findCharacterBackward {
+  // we need a second char
+  if(!_waitingForFurtherInput) {
+    _waitingForFurtherInput=TRUE;
+    return;
+  }
+
+  int crash=*((int *)0x00);
 }
 
 /**

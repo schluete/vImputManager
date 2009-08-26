@@ -42,6 +42,9 @@
 // move cursor down
 - (void)cursorDown;
 
+// places the cursor on the character in the column specified by the count (7.1, 7.2). 
+- (void)cursorToColumn;
+
 // move to the beginning of the current line
 - (void)beginningOfLine;
 
@@ -92,6 +95,9 @@
 
 // Finds the first instance of the next character following the cursor on the current line
 - (void)findCharacter;
+
+// Finds a single character, backwards in the current line. A count repeats this search that many times (4.1). 
+- (void)findCharacterBackward;
 
 // Advances the cursor up to the character before the next character typed
 - (void)findAndStopBeforeCharacter;

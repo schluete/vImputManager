@@ -59,6 +59,30 @@
 }
 
 /**
+ * move cursor to a given column
+ */
+- (void)testMoveCursorToColumn {
+  [self replaceText:@"the quick brown fox\njumps over the lazy dog"];
+
+  // move to start of line
+  [_cmds processInput:'|'];
+  STAssertEquals([self cursorPosition],(NSUInteger)0,@"invalid cursor placement?!");
+
+  // move to the tenth column
+  [_cmds processInput:'1'];
+  [_cmds processInput:'0'];
+  [_cmds processInput:'|'];
+  STAssertEquals([self cursorPosition],(NSUInteger)10,@"invalid cursor placement?!");
+
+  // move to end of line
+  [_cmds processInput:'1'];
+  [_cmds processInput:'0'];
+  [_cmds processInput:'0'];
+  [_cmds processInput:'|'];
+  STAssertEquals([self cursorPosition],(NSUInteger)19,@"invalid cursor placement?!");
+}
+
+/**
  * test some possibilities to enter insert mode
  */
 - (void)testInsertModeCommands {

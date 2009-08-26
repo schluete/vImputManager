@@ -54,6 +54,9 @@ struct {
   {' ',FALSE,@"cursorRight"},
   {NSRightArrowFunctionKey,FALSE,@"cursorRight"},
 
+  // Places the cursor on the character in the column specified by the count (7.1, 7.2). 
+  {'|',FALSE,@"cursorToColumn"},
+
   // Moves to the first character on the current line (<^> to the first non-white position).
   {'0',FALSE,@"beginningOfLine"},
   {'^',FALSE,@"beginningOfLineNonWhitespace"},
@@ -116,12 +119,14 @@ struct {
   // Finds the first instance of the next character following the cursor on the current line. A count repeats the find (4.1). 
   {'f',FALSE,@"findCharacter"},
 
+  // Finds a single character, backwards in the current line. A count repeats this search that many times (4.1). 
+  {'F',FALSE,@"findCharacterBackward"},
+
   // Advances the cursor up to the character before the next character typed. Most useful with operators such as
   // <d> and <c> to delete the characters up to a following character. One can use <.> to delete more if this 
   // doesn’t delete enough the first time (4.1). 
   {'t',FALSE,@"findAndStopBeforeCharacter"},
 
-//F   Finds a single character, backwards in the current line. A count repeats this search that many times (4.1). 
 
   // end-of-list marker, not used as a vi command
   {0,FALSE,nil}
@@ -186,6 +191,7 @@ List of operators in VIM:
 
 
 
+^?  (or <DEL>) Interrupts the editor, returning it to command accepting state (1.6, 7.5). 
 
 ^D  As a command, scrolls down a half-window of text. A count gives the number of (logical) lines to scroll, 
     and is remembered for future ^D and ^U commands (2.1,7.2). During an insert, backtabs over autoindent 
@@ -392,10 +398,6 @@ z   Redraws the screen with the current line placed as specified by the followin
     the paragraphs option, normally ".IP", ".LP", ".PP", ".QP" and ".bp". A paragraph also begins after a 
     completely empty line, and at each section boundary (see [[ above) (4.2, 6.8, 7.6). 
 
-|   Places the cursor on the character in the column specified by the count (7.1, 7.2). 
-
 }   Advances to the beginning of the next paragraph. See <{> for the definition of paragraph (4.2,6.8,7.6). 
-
-^?  (or <DEL>) Interrupts the editor, returning it to command accepting state (1.6, 7.5). 
 
 */
