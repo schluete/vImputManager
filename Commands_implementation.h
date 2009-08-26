@@ -78,11 +78,22 @@
 // Appends arbitrary text after the current cursor position
 - (void)insertModeAfterCursor;
 
+// Inserts at the beginning of a line; a synonym for ^i. 
+- (void)insertModeAtBeginningOfLine;
+
+// Appends at the end of line, a synonym for $a (7.2). 
+- (void)insertModeAtEndOfLine;
+
+// Changes the rest of the text on the current line; a synonym for c$. 
+- (void)changeToEndOfLine;
+
+// Deletes the rest of the text on the current line; a synonym for d$. 
+- (void)deleteEndOfLine;
+
 // Finds the first instance of the next character following the cursor on the current line
 - (void)findCharacter;
 
 // Advances the cursor up to the character before the next character typed
 - (void)findAndStopBeforeCharacter;
-
 
 @end

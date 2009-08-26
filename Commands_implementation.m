@@ -368,6 +368,40 @@
 }
 
 /**
+ * Inserts at the beginning of a line; a synonym for ^i. 
+ */
+- (void)insertModeAtBeginningOfLine {
+  [self beginningOfLineNonWhitespace];
+  _viMode=Insert;
+}
+
+/**
+ * Appends at the end of line, a synonym for $a (7.2). 
+ */
+- (void)insertModeAtEndOfLine {
+  [self endOfLine];
+  _viMode=Insert;
+}
+
+/**
+ * Changes the rest of the text on the current line; a synonym for c$. 
+ */
+- (void)changeToEndOfLine {
+  [self deleteEndOfLine];
+  _viMode=Insert;
+}
+
+/**
+ * Deletes the rest of the text on the current line; a synonym for d$. 
+ */
+- (void)deleteEndOfLine {
+  int startPos=[self cursorPosition],
+      endPos=[self findEndOfLine:startPos];
+  [_textView setSelectedRange:NSMakeRange(startPos,endPos-startPos)];
+  [_textView delete:self];
+}
+
+/**
  * Finds the first instance of the next character following the cursor on the current 
  * line. A count repeats the find (4.1). 
  */

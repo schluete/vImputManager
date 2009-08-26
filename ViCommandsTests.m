@@ -59,6 +59,64 @@
 }
 
 /**
+ * test some possibilities to enter insert mode
+ */
+- (void)testInsertModeCommands {
+  // simple insert mode via <i>
+  [self replaceText:@"the quick brown\nfox jumps over\nthe lazy dog"];
+  [self moveCursorTo:1];
+  [_cmds processInput:'i'];
+  [_textView insertText:@"foo"];
+  [_cmds processInput:0x1b];
+  STAssertEquals([self cursorPosition],(NSUInteger)4,@"invalid cursor movement?!");
+  STAssertEqualObjects([self line:0],@"tfoohe quick brown\n",@"invalid line content?!");
+
+  // simple insert mode after current cursor via <a>
+  [self replaceText:@"the quick brown\nfox jumps over\nthe lazy dog"];
+  [self moveCursorTo:1];
+  [_cmds processInput:'a'];
+  [_textView insertText:@"foo"];
+  [_cmds processInput:0x1b];
+  STAssertEquals([self cursorPosition],(NSUInteger)5,@"invalid cursor movement?!");
+  STAssertEqualObjects([self line:0],@"thfooe quick brown\n",@"invalid line content?!");
+
+  // insert at the beginning of the line via <I>
+  [self replaceText:@"   the quick brown\nfox jumps over\nthe lazy dog"];
+  [self moveCursorTo:8];
+  [_cmds processInput:'I'];
+  [_textView insertText:@"foo"];
+  [_cmds processInput:0x1b];
+  STAssertEquals([self cursorPosition],(NSUInteger)6,@"invalid cursor movement?!");
+  STAssertEqualObjects([self line:0],@"   foothe quick brown\n",@"invalid line content?!");
+
+  // append to the end of line via <A>
+  [self replaceText:@"   the quick brown\nfox jumps over\nthe lazy dog"];
+  [self moveCursorTo:8];
+  [_cmds processInput:'A'];
+  [_textView insertText:@"foo"];
+  [_cmds processInput:0x1b];
+  STAssertEquals([self cursorPosition],(NSUInteger)21,@"invalid cursor movement?!");
+  STAssertEqualObjects([self line:0],@"   the quick brownfoo\n",@"invalid line content?!");
+
+  // change to the end of line via <C>
+  [self replaceText:@"the quick brown\nfox jumps over\nthe lazy dog"];
+  [self moveCursorTo:6];
+  [_cmds processInput:'C'];
+  [_textView insertText:@"foo"];
+  [_cmds processInput:0x1b];
+  STAssertEquals([self cursorPosition],(NSUInteger)9,@"invalid cursor movement?!");
+  STAssertEqualObjects([self line:0],@"the qufoo\n",@"invalid line content?!");
+
+  // delete to the end of line via <D>
+  [self replaceText:@"the quick brown\nfox jumps over\nthe lazy dog"];
+  [self moveCursorTo:6];
+  [_cmds processInput:'D'];
+  STAssertTrue([_cmds viMode]==Command,@"vi should be in command mode");
+  STAssertEquals([self cursorPosition],(NSUInteger)6,@"invalid cursor movement?!");
+  STAssertEqualObjects([self line:0],@"the qu\n",@"invalid line content?!");
+}
+
+/**
  * does the delete operator work with the <t> and <f> commands?
  */
 - (void)testDeleteToSearchSingleCharacters {

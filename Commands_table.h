@@ -101,6 +101,18 @@ struct {
   // all on one line. The insertion terminates with an <ESC> (3.1,7.2). 
   {'a',FALSE,@"insertModeAfterCursor"},
 
+  // Inserts at the beginning of a line; a synonym for ^i. 
+  {'I',FALSE,@"insertModeAtBeginningOfLine"},
+
+  // Appends at the end of line, a synonym for $a (7.2). 
+  {'A',FALSE,@"insertModeAtEndOfLine"},
+
+  // Changes the rest of the text on the current line; a synonym for c$. 
+  {'C',FALSE,@"changeToEndOfLine"},
+
+  // Deletes the rest of the text on the current line; a synonym for d$. 
+  {'D',FALSE,@"deleteEndOfLine"},
+
   // Finds the first instance of the next character following the cursor on the current line. A count repeats the find (4.1). 
   {'f',FALSE,@"findCharacter"},
 
@@ -109,6 +121,7 @@ struct {
   // doesn’t delete enough the first time (4.1). 
   {'t',FALSE,@"findAndStopBeforeCharacter"},
 
+//F   Finds a single character, backwards in the current line. A count repeats this search that many times (4.1). 
 
   // end-of-list marker, not used as a vi command
   {0,FALSE,nil}
@@ -273,8 +286,6 @@ List of operators in VIM:
     user will have topreceed the characters. [*and˜in the search pattern with a\to get them to work 
     as one would naively expect (1.6, 2.2, 6.1, 7.2, 7.4). 
 
-1-9 Used to form numeric arguments to commands (2.3, 7.2). 
-
 :   A prefix to a set of commands for file and option manipulation and escapes to the system. Input is given
     on the bottom line and terminated with an <CR>, and the command then executed. The user can return to where 
     he was by hitting <DEL> or <RUB> if he hit : accidentally (see ex(1) and primarily 6.2 and 7.3). 
@@ -288,19 +299,9 @@ List of operators in VIM:
 @   A macro character (6.9). If this is the kill character, it must be escaped with a \ to type it in during 
     input mode, as it normally backs over the input given on the current line (3.1, 3.4, 7.5). 
 
-A   Appends at the end of line, a synonym for $a (7.2). 
-
-C   Changes the rest of the text on the current line; a synonym for c$. 
-
-D   Deletes the rest of the text on the current line; a synonym for d$. 
-
-F   Finds a single character, backwards in the current line. A count repeats this search that many times (4.1). 
-
 H   (or <Home>). Homes the cursor to the top line on the screen. If a count is given, then the cursor is moved to
     the count’th line on the screen. In any case the cursor is moved to the first non-white character on the 
     line. If used as the target of an operator, full lines are affected (2.3, 3.2). 
-
-I   Inserts at the beginning of a line; a synonym for ^i. 
 
 J   Joins together lines, supplying appropriate white space: one space between words, two spaces after a., and 
     no spaces at all if the first character of the joined on line is ). A count causes that many lines to be 
