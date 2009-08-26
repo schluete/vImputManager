@@ -15,32 +15,15 @@ typedef enum {
 
 
 @interface KeyHandler: NSObject {
-  NSTextView *textView;
-  ViMode currentMode;
-  Commands *commands;
+  NSTextView *_textView;
+  ViMode _currentMode;
+  Commands *_commands;
 }
 
 // constructor, called to initialize the view we're working on
-- (id)initWithTextView:(NSTextView *)textView;
+- (id)initWithTextView:(NSTextView *)aTextView;
 
 // called by the modified text view to process an event
 - (BOOL)handleKeyDownEvent:(NSEvent *)event;
-
-/*
-// change vi mode to command mode
-- (void)handleEscape;
-
-// process consecutive digits as numbers
-- (BOOL)handleDigits:(unichar)charCode;
-
-// process command mode key input
-- (BOOL)handleCommand:(unichar)charCode modifiers:(NSUInteger)modifiers;
-
-// handle cursor movement commands
-- (BOOL)handleMovement:(unichar)charCode modifiers:(NSUInteger)modifiers;
-
-// handle insert mode commands
-- (BOOL)handleInsert:(unichar)charCode modifiers:(NSUInteger)modifiers;
-*/
 
 @end

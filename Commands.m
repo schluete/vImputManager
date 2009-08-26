@@ -17,10 +17,10 @@
     return nil; 
 
   [aTextView retain];
-  textView=aTextView;
+  _textView=aTextView;
 
   [self initializeCommandsTable];
-  countBuffer=[[NSMutableString alloc] initWithCapacity:10];
+  _countBuffer=[[NSMutableString alloc] initWithCapacity:10];
   [self escape];
   return self; 
 }
@@ -33,8 +33,8 @@
 - (void)dealloc { [self destructor]; [super dealloc]; }
 - (void)finalize { [self destructor]; [super finalize]; }
 - (void)destructor {
-  [countBuffer release];
-  [textView release];
+  [_countBuffer release];
+  [_textView release];
 }
 
 /**
@@ -44,11 +44,20 @@
  * message
  */
 - (void)initializeCommandsTable {
-  if(ListOfCommands[0].selector==nil)
-    for(int pos=0;ListOfCommands[pos].key!=0;pos++) {
-      NSString *selectorName=ListOfCommands[pos].selectorName;
-      ListOfCommands[pos].selector=NSSelectorFromString(selectorName);
-    }
+  if(ListOfCommands[0].selector!=nil)
+    return;
+
+  // zuerst die Liste mit den Operators
+  for(int pos=0;ListOfOperators[pos].key!=0;pos++) {
+    NSString *selectorName=ListOfOperators[pos].selectorName;
+    ListOfOperators[pos].selector=NSSelectorFromString(selectorName);
+  }
+
+  // dann die Liste mit den Commands
+  for(int pos=0;ListOfCommands[pos].key!=0;pos++) {
+    NSString *selectorName=ListOfCommands[pos].selectorName;
+    ListOfCommands[pos].selector=NSSelectorFromString(selectorName);
+  }
 }
 
 /**
@@ -56,12 +65,12 @@
  * command mode 
  */
 - (BOOL)escape {
-  isReadingCount=FALSE;
-  [countBuffer setString:@""];
-  currentCount=0;
+  _isReadingCount=FALSE;
+  [_countBuffer setString:@""];
+  _currentCount=0;
 
-  isReadingNamedRegister=FALSE;
-  currentNamedRegister=0;
+  _isReadingNamedRegister=FALSE;
+  _currentNamedRegister=0;
 
   return TRUE;
 }
@@ -77,10 +86,11 @@
  * process a single input character from the keyboard
  */
 - (BOOL)processInput:(unichar)input withControl:(BOOL)isControl {
-//  [Logger log:@"processing <%c> (control <%d>)",input,isControl];
+//[Logger log:@"processing <%c> (%x) (control <%d>)",input,input,isControl];
+
   // wenn wir ein Escape gefunden haben brechen wir die aktuelle
   // Eingabe ab und initialisieren den Command Mode neu
-  if(input==0x0b)
+  if(input==0x1b)
     return [self escape];
 
   // dann gucken wir, ob wir vielleicht gerade in einem Count 
@@ -93,24 +103,30 @@
   if(!isControl && [self processInputAsNamedRegister:input])
     return TRUE;
 
+  // nun gucken wir doch mal, ob wir einen Operator gefunden haben
+  for(int pos=0;ListOfOperators[pos].key!=0;pos++)
+    if(ListOfOperators[pos].key==input) {
+      SEL action=ListOfOperators[pos].selector;
+      // rufen wir diesen Operator gerade zum zweiten Mal auf?
+     
+      [self performSelector:action];
+      return TRUE;
+    }
+
   // jetzt bleibt nur noch die die Liste der moeglichen Kommandos, 
   // die wir nun durchsuchen ob irgendwas passt.
   for(int pos=0;ListOfCommands[pos].key!=0;pos++)
     if(ListOfCommands[pos].key==input && ListOfCommands[pos].control==isControl) {
       SEL action=ListOfCommands[pos].selector;
-      if([self respondsToSelector:action]) {
-        [self performSelector:action];
-        [textView scrollRangeToVisible:[textView selectedRange]];
-        currentCount=0;
-        currentNamedRegister=0;
-      }
-      else
-        [Logger log:@"unknown action <%s>",action];
+      [self performSelector:action];
+      [_textView scrollRangeToVisible:[_textView selectedRange]];
+      _currentCount=0;
+      _currentNamedRegister=0;
       return TRUE;
     }
 
   // keinen passenden Commandhandler gefunden, schade.
-  [Logger log:@"invalid input, no command found for <%c> (control <%d>)",input,isControl];
+  [Logger log:@"invalid input, no command or operator found for <%c> (control <%d>)",input,isControl];
   return FALSE;
 }
 
@@ -121,16 +137,16 @@
 - (BOOL)processInputAsNamedRegister:(unichar)input {
   if(input!='"')
     return FALSE;
-  if(isReadingNamedRegister) {
+  if(_isReadingNamedRegister) {
     if((input>='a' && input<='z') || (input>='A' && input<='Z') ||
        (input>='0' && input<='9') ||
        input=='.' || input=='%' || input=='#' || input==':' || input=='-')
-      currentNamedRegister=input;
+      _currentNamedRegister=input;
     else
-      currentNamedRegister=0;
+      _currentNamedRegister=0;
   }
   else
-    isReadingNamedRegister=TRUE;
+    _isReadingNamedRegister=TRUE;
   return TRUE;
 }
 
@@ -143,23 +159,23 @@
   // wenn die Eingabe keine Zahl ist oder wir eine fuehrende 0 haben
   // (die es im VI als count nicht geben kann) ignorieren wir die Eingabe
   if(![[NSCharacterSet decimalDigitCharacterSet] characterIsMember:input]) {
-    if(isReadingCount) {
-      currentCount=[countBuffer intValue];
-      isReadingCount=FALSE;
+    if(_isReadingCount) {
+      _currentCount=[_countBuffer intValue];
+      _isReadingCount=FALSE;
     }
     return FALSE;
   }
-  if(!isReadingCount && input=='0')
+  if(!_isReadingCount && input=='0')
     return FALSE;
 
   // wenn es die erste Ziffer des count ist eine neue Zahl anfangen
-  if(!isReadingCount) {
-    isReadingCount=TRUE;
-    [countBuffer setString:@""];
+  if(!_isReadingCount) {
+    _isReadingCount=TRUE;
+    [_countBuffer setString:@""];
   }
 
   // und dann die Ziffer an die Zahl anfuegen
-  [countBuffer appendFormat:@"%c",input];
+  [_countBuffer appendFormat:@"%c",input];
   return TRUE;
 }
 

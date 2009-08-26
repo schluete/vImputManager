@@ -19,8 +19,8 @@
  */
 - (id)initWithTextView:(NSTextView *)aTextView { 
   [super init]; 
-  textView=[aTextView retain];
-  commands=[[Commands alloc] initWithTextView:textView];
+  _textView=[aTextView retain];
+  _commands=[[Commands alloc] initWithTextView:_textView];
   return self; 
 }
 
@@ -32,8 +32,8 @@
 - (void)dealloc { [self destructor]; [super dealloc]; }
 - (void)finalize { [self destructor]; [super finalize]; }
 - (void)destructor {
-  [commands release];
-  [textView release];
+  [_commands release];
+  [_textView release];
 }
 
 /**
@@ -45,15 +45,15 @@
   NSUInteger modifiers=[event modifierFlags];
 
   // zuerst ueberpruefen wir, ob wir ein [ESC] gefunden haben
-  if(currentMode!=Command && charCode==0x1b) {
-    currentMode=Command;
+  if(_currentMode!=Command && charCode==0x1b) {
+    _currentMode=Command;
     return FALSE;
   }
 
   // ok, es war kein Escape, sind wir im Command Mode?
-  if(currentMode==Command) {
+  if(_currentMode==Command) {
     BOOL isControl=(modifiers & NSControlKeyMask)>0;
-    [commands processInput:charCode withControl:isControl];
+    [_commands processInput:charCode withControl:isControl];
     return FALSE;
   }
 

@@ -1,7 +1,6 @@
 //  Created by Axel on 20.08.09.
 //  Copyright 2009 pqrs.de, All rights reserved.
 
-#import "Commands.h"
 #import "Commands_implementation.h"
 #import "Logger.h"
 
@@ -11,7 +10,7 @@
  * return the current cursor position
  */
 - (NSUInteger)cursorPosition {
-  NSRange range=[textView selectedRange];
+  NSRange range=[_textView selectedRange];
   return range.location;
 }
 
@@ -19,7 +18,7 @@
  * move the cursor to the given position.
  */
 - (void)moveCursorTo:(NSUInteger)pos {
-  [textView setSelectedRange:NSMakeRange(pos,0)];
+  [_textView setSelectedRange:NSMakeRange(pos,0)];
 }
 
 /**
@@ -27,7 +26,7 @@
  * or 0 if we're at the beginning of the text
  */
 - (NSUInteger)findStartOfLine:(NSUInteger)currentPos {
-  NSString *text=[[textView textStorage] string];
+  NSString *text=[[_textView textStorage] string];
   NSRange lineRange=[text lineRangeForRange:NSMakeRange(currentPos,0)];
   return lineRange.location;
 }
@@ -38,7 +37,7 @@
  */
 - (NSUInteger)findEndOfLine:(NSUInteger)currentPos {
   // determine the last position of the line
-  NSString *text=[[textView textStorage] string];
+  NSString *text=[[_textView textStorage] string];
   NSRange lineRange=[text lineRangeForRange:NSMakeRange(currentPos,0)];
   NSInteger pos=lineRange.location+lineRange.length;
 
@@ -65,7 +64,7 @@
 - (void)cursorLeft {
   NSInteger pos=[self cursorPosition],
             startOfLine=[self findStartOfLine:pos];
-  pos-=(currentCount>0 ? currentCount:1);
+  pos-=(_currentCount>0 ? _currentCount:1);
   if(pos<startOfLine)
     pos=startOfLine;
   [self moveCursorTo:pos];
@@ -77,7 +76,7 @@
 - (void)cursorRight {
   NSInteger pos=[self cursorPosition],
             endOfLine=[self findEndOfLine:pos];
-  pos+=(currentCount>0 ? currentCount:1);
+  pos+=(_currentCount>0 ? _currentCount:1);
   if(pos>endOfLine)
     pos=endOfLine;
   [self moveCursorTo:pos];
@@ -87,9 +86,9 @@
  * Moves the cursor one line up.
  */
 - (void)cursorUp {
-  int lines=(currentCount>0 ? currentCount:1);
+  int lines=(_currentCount>0 ? _currentCount:1);
   for(int i=0;i<lines;i++)
-    [textView moveUp:self];
+    [_textView moveUp:self];
 }
 
 /**
@@ -98,21 +97,25 @@
  * Moves the cursor one character to the left. A count repeats the effect (3.1,7.5). 
  */
 - (void)cursorDown {
-  int lines=(currentCount>0 ? currentCount:1);
+  int lines=(_currentCount>0 ? _currentCount:1);
   for(int i=0;i<lines;i++)
-    [textView moveDown:self];
+    [_textView moveDown:self];
 }
 
-// move to the beginning of the current line
+/**
+ * move to the beginning of the current line
+ */
 - (void)beginningOfLine {
   NSUInteger pos=[self findStartOfLine:[self cursorPosition]];
   [self moveCursorTo:pos];
 }
 
-// move to the first non-whitespace character of the current line
+/**
+ * move to the first non-whitespace character of the current line
+ */
 - (void)beginningOfLineNonWhitespace {
   NSUInteger pos=[self cursorPosition];
-  NSString *text=[[textView textStorage] string];
+  NSString *text=[[_textView textStorage] string];
   NSRange lineRange=[text lineRangeForRange:NSMakeRange(pos,0)],
           where=[text rangeOfCharacterFromSet:[[NSCharacterSet whitespaceCharacterSet] invertedSet]
                                       options:0
@@ -123,7 +126,9 @@
     [self moveCursorTo:where.location];
 }
 
-// moves to the end of the current line
+/**
+ * moves to the end of the current line
+ */
 - (void)endOfLine {
   NSUInteger pos=[self findEndOfLine:[self cursorPosition]];
   [self moveCursorTo:pos];
@@ -135,12 +140,12 @@
  * center if necessary (7.2). 
  */
 - (void)goToLine {
-  if(currentCount==0)
-    [textView moveToEndOfDocument:self];
+  if(_currentCount==0)
+    [_textView moveToEndOfDocument:self];
   else {
     NSInteger pos=0;
-    NSString *text=[[textView textStorage] string];
-    for(int line=0;line<currentCount-1;line++) {
+    NSString *text=[[_textView textStorage] string];
+    for(int line=0;line<_currentCount-1;line++) {
       NSRange lineRange=[text lineRangeForRange:NSMakeRange(pos,0)];
       pos=lineRange.location+lineRange.length;
     }
@@ -152,10 +157,6 @@
 /**
  * Advances to the beginning of the next word. A word is a sequence of alphanumerics, 
  * or a sequence of special characters. A count repeats the effect (2.4). 
- *
-first line
-def 123a_bc!cdef abc
-second line
  */
 - (void)wordForward {
   NSMutableCharacterSet *wordChars=[[[NSMutableCharacterSet alloc] init] autorelease];
@@ -180,9 +181,9 @@ second line
  */
 - (void)wordForwardWithWordCharacters:(NSCharacterSet *)wordChars {
   NSCharacterSet *whitespaceChars=[NSCharacterSet whitespaceAndNewlineCharacterSet];
-  NSString *text=[[textView textStorage] string];
+  NSString *text=[[_textView textStorage] string];
   NSInteger pos=[self cursorPosition];
-  int count=(currentCount>0 ? currentCount:1);
+  int count=(_currentCount>0 ? _currentCount:1);
   for(int i=0;i<count;i++) {
     // let's find the end of the current word. If the current char is a word char then we're
     // searching only for word chars, otherwise we take the current char as a special char and
@@ -240,9 +241,9 @@ second line
 - (void)wordBackwardWithWordCharacters:(NSCharacterSet *)wordChars {
   NSCharacterSet *whitespaceChars=[NSCharacterSet whitespaceAndNewlineCharacterSet];
 
-  NSString *text=[[textView textStorage] string];
+  NSString *text=[[_textView textStorage] string];
   NSInteger pos=[self cursorPosition]-1;
-  int count=(currentCount>0 ? currentCount:1);
+  int count=(_currentCount>0 ? _currentCount:1);
   for(int i=0;i<count;i++) {
     // move over the whitespaces before the current word
     while(pos>=0 && [whitespaceChars characterIsMember:[text characterAtIndex:pos]])
@@ -279,7 +280,7 @@ second line
  */
 - (void)switchCase {
   // first let's determine the final position in the text to swap the case
-  int count=(currentCount>0 ? currentCount:1);
+  int count=(_currentCount>0 ? _currentCount:1);
   NSInteger startPos=[self cursorPosition],
             endOfLine=[self findEndOfLine:startPos];
   if(startPos+count>endOfLine)
@@ -287,7 +288,7 @@ second line
   NSRange swapRange=NSMakeRange(startPos,count);
 
   // then get the current content and swap its case.
-  NSString *text=[[textView textStorage] string];
+  NSString *text=[[_textView textStorage] string];
   NSMutableString *result=[[[NSMutableString alloc] initWithCapacity:swapRange.length] autorelease];
   for(int i=0;i<count;i++) {
     NSString *singleChar=[text substringWithRange:NSMakeRange(startPos+i,1)];
@@ -298,7 +299,7 @@ second line
   }
  
   // finally replace the original content with the swapped version
-  [textView replaceCharactersInRange:swapRange
+  [_textView replaceCharactersInRange:swapRange
                           withString:result];
   [self moveCursorTo:(startPos+count)];
 }

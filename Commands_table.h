@@ -82,10 +82,12 @@ struct {
   {'w',FALSE,@"wordForward"},
   {'W',FALSE,@"WORDForward"},
 
+  // XXX
   // Advances to the end of the next word, defined as for <b> and <w> (or <B> and <W>). A count 
   // repeats the effect (2.4, 3.1). 
   {'e',FALSE,@"endOfWordForward"},
   {'E',FALSE,@"endOfWORDForward"},
+  // XXX
 
   // Switches the case of the given count of characters starting from the current cursor position to the end of 
   // the current line. Non-alphabetic characters remain unchanged.

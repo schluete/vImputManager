@@ -15,16 +15,16 @@ typedef enum _SearchDirection {
  * the command processor class
  */
 @interface Commands: NSObject {
-  NSTextView *textView;
-  BOOL isReadingCount;
-  NSMutableString *countBuffer;
-  int currentCount;
-  BOOL isReadingNamedRegister;
-  unichar currentNamedRegister;
+  NSTextView *_textView;
+  BOOL _isReadingCount;
+  NSMutableString *_countBuffer;
+  int _currentCount;
+  BOOL _isReadingNamedRegister;
+  unichar _currentNamedRegister;
 }
 
 // constructor, called to set the view we're working on
-- (id)initWithTextView:(NSTextView *)textView;
+- (id)initWithTextView:(NSTextView *)aTextView;
 
 // cancel current command
 - (BOOL)escape;
