@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6602E67D104539FE004CED12 /* Commands_operators.m in Sources */ = {isa = PBXBuildFile; fileRef = 6602E67C104539FE004CED12 /* Commands_operators.m */; };
+		6602E67E104539FE004CED12 /* Commands_operators.m in Sources */ = {isa = PBXBuildFile; fileRef = 6602E67C104539FE004CED12 /* Commands_operators.m */; };
+		6602E67F104539FE004CED12 /* Commands_operators.m in Sources */ = {isa = PBXBuildFile; fileRef = 6602E67C104539FE004CED12 /* Commands_operators.m */; };
 		66414093103451F70017985F /* NSTextView_vImputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 66414092103451F70017985F /* NSTextView_vImputManager.m */; };
 		6641409C103454580017985F /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 6641409B103454580017985F /* Logger.m */; };
 		664140F61034730E0017985F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 664140F0103472B30017985F /* InfoPlist.strings */; };
@@ -40,6 +43,8 @@
 		089C167FFE841241C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		32DBCF630370AF2F00C91783 /* vImputManager_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vImputManager_Prefix.pch; sourceTree = "<group>"; };
+		6602E67B104539FE004CED12 /* Commands_operators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Commands_operators.h; sourceTree = "<group>"; };
+		6602E67C104539FE004CED12 /* Commands_operators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Commands_operators.m; sourceTree = "<group>"; };
 		662C4E45103A1B81003DF4B9 /* Info.template */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Info.template; path = doc/Info.template; sourceTree = "<group>"; };
 		662C4E46103A1B81003DF4B9 /* inputmanager.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = inputmanager.txt; path = doc/inputmanager.txt; sourceTree = "<group>"; };
 		662C4E47103A1B81003DF4B9 /* ipc.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ipc.txt; path = doc/ipc.txt; sourceTree = "<group>"; };
@@ -141,6 +146,8 @@
 		08FB77AFFE84173DC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				6602E67B104539FE004CED12 /* Commands_operators.h */,
+				6602E67C104539FE004CED12 /* Commands_operators.m */,
 				669B28971042AE9D00864429 /* Commands.h */,
 				669B28981042AE9D00864429 /* Commands.m */,
 				669B28991042AE9D00864429 /* Commands_implementation.h */,
@@ -361,6 +368,7 @@
 				6641414A103482910017985F /* KeyHandlerStorage.m in Sources */,
 				669B289D1042AE9D00864429 /* Commands.m in Sources */,
 				669B289E1042AE9D00864429 /* Commands_implementation.m in Sources */,
+				6602E67D104539FE004CED12 /* Commands_operators.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,6 +380,7 @@
 				669B29401042BD8600864429 /* Commands_implementation.m in Sources */,
 				669B29411042BD8600864429 /* Logger.m in Sources */,
 				669B29261042B60500864429 /* ViCommandsTests.m in Sources */,
+				6602E67F104539FE004CED12 /* Commands_operators.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,6 +395,7 @@
 				66414149103482910017985F /* KeyHandlerStorage.m in Sources */,
 				669B289F1042AE9D00864429 /* Commands.m in Sources */,
 				669B28A01042AE9D00864429 /* Commands_implementation.m in Sources */,
+				6602E67E104539FE004CED12 /* Commands_operators.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
