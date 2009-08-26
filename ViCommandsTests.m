@@ -1,5 +1,7 @@
 //  Created by Axel on 24.08.09.
 //  Copyright 2009 pqrs.de. All rights reserved.
+//  
+//  xcodebuild -target Testing -configuration Debug  
 
 #import "ViCommandsTests.h"
 #import "Commands.h"
@@ -43,6 +45,18 @@
 - (void)tearDown {
   [textView release];
   [cmds release];
+}
+
+/**
+ * try to cancel a command by pressing escape
+ */
+- (void)testCancelCurrentCommand {
+  [self moveCursorTo:0];
+  [cmds processInput:'1'];
+  [cmds processInput:'0'];
+  [cmds processInput:0x1b];
+  [cmds processInput:'l'];
+  STAssertEquals([self cursorPosition],(NSUInteger)1,@"command wasn't canceled?!");
 }
 
 /**
