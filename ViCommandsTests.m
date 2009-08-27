@@ -59,6 +59,47 @@
 }
 
 /**
+ * open new lines via <o> and <O>
+ */
+- (void)testOpenNewLines {
+  // let's open a line below the cursor
+  [self replaceText:@"the quick\nbrown fox"];
+  [self moveCursorTo:5];
+  [_cmds processInput:'o'];
+  STAssertTrue([_cmds viMode]==Insert,@"vi should be in insert mode");
+  STAssertEquals([self cursorPosition],(NSUInteger)10,@"invalid cursor location?!");
+  STAssertEqualObjects([self line:1],@"\n",@"invalid line content?!");
+  [_cmds processInput:0x1b];
+
+  // let's open a line below the cursor when we're at the last line
+  [self replaceText:@"the quick\nbrown fox"];
+  [self moveCursorTo:13];
+  [_cmds processInput:'o'];
+  STAssertTrue([_cmds viMode]==Insert,@"vi should be in insert mode");
+  STAssertEquals([self cursorPosition],(NSUInteger)20,@"invalid cursor location?!");
+  STAssertEqualObjects([self line:2],@"",@"invalid line content?!");
+  [_cmds processInput:0x1b];
+
+  // let's open a line above the cursor
+  [self replaceText:@"the quick\nbrown fox"];
+  [self moveCursorTo:13];
+  [_cmds processInput:'O'];
+  STAssertTrue([_cmds viMode]==Insert,@"vi should be in insert mode");
+  STAssertEquals([self cursorPosition],(NSUInteger)10,@"invalid cursor location?!");
+  STAssertEqualObjects([self line:1],@"\n",@"invalid line content?!");
+  [_cmds processInput:0x1b];
+
+  // let's open a line above the cursor when we're at the first line
+  [self replaceText:@"the quick\nbrown fox"];
+  [self moveCursorTo:5];
+  [_cmds processInput:'O'];
+  STAssertTrue([_cmds viMode]==Insert,@"vi should be in insert mode");
+  STAssertEquals([self cursorPosition],(NSUInteger)0,@"invalid cursor location?!");
+  STAssertEqualObjects([self line:0],@"\n",@"invalid line content?!");
+  [_cmds processInput:0x1b];
+}
+
+/**
  * replace single characters 
  */
 - (void)testReplacementOfSingleCharacters {

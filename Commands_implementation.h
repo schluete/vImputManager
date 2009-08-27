@@ -114,4 +114,10 @@
 // determine the range to modify for single character operations
 - (NSRange)rangeForSingleCharacterOperations;
 
+// opens new lines below the current line; otherwise like <O> (3.1). 
+- (void)openNewLine;
+
+// opens a newline above the current line
+- (void)openNewLineAbove;
+
 @end

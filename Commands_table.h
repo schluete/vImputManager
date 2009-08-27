@@ -141,6 +141,15 @@ struct {
   // iteration of <r> (3.2). 
   {'r',FALSE,@"replaceCharacter"},
 
+  // Opens new lines below the current line; otherwise like <O> (3.1). 
+  {'o',FALSE,@"openNewLine"},
+
+  // Opens a newline above the current line and inputs text there up to an ESC. A count can be used on dumb 
+  // terminals to specify a number of lines to be opened; this is generally obsolete, as the slowopen option 
+  // works better (3.1). 
+  {'O',FALSE,@"openNewLineAbove"},
+
+
   // end-of-list marker, not used as a vi command
   {0,FALSE,nil}
 };
@@ -333,10 +342,6 @@ M   Moves the cursor to the middle line on the screen, at the first non-white po
 
 N   Scans for the next match of the last pattern, but in the reverse direction; this is the reverse of <n>. 
 
-O   Opens a newline above the current line and inputs text there up to an ESC. A count can be used on dumb 
-    terminals to specify a number of lines to be opened; this is generally obsolete, as the slowopen option 
-    works better (3.1). 
-
 P   Puts the last deleted text back before/ above the cursor. The text goes back as whole lines above the 
     cursor if it was deleted as whole lines. Otherwise the text is inserted between the characters before and 
     at the cursor. May be preceded by a named buffer specification "x to retrieve the contents of the buffer; 
@@ -382,8 +387,6 @@ m   Marks the current position of the cursor in the mark register which is speci
     The user can return to this position or use it with an operator using <`> or <'> (5.3). 
 
 n   Repeats the last </> or <?> scanning commands (2.2). 
-
-o   Opens new lines below the current line; otherwise like <O> (3.1). 
 
 p   Puts text after/ below the cursor; otherwise like <P> (6.3). 
 

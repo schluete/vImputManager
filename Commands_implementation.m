@@ -560,6 +560,31 @@
   return NSMakeRange(pos,count);
 }
 
+/**
+ * Opens new lines below the current line; otherwise like <O> (3.1). 
+ */
+- (void)openNewLine {
+  int endOfLine=[self findEndOfLine:[self cursorPosition]];
+  [self moveCursorTo:endOfLine];
+  [_textView insertText:@"\n"];
+  _viMode=Insert;
+}
+
+/**
+ * Opens a newline above the current line and inputs text there up to an ESC. A count can be used on dumb 
+ * terminals to specify a number of lines to be opened; this is generally obsolete, as the slowopen option 
+ * works better (3.1). 
+ */
+- (void)openNewLineAbove {
+  int startOfLine=[self findStartOfLine:[self cursorPosition]];
+  if(startOfLine>0)
+    startOfLine--;
+  [self moveCursorTo:startOfLine];
+  [_textView insertText:@"\n"];
+  if(startOfLine==0)
+    [self moveCursorTo:0];
+  _viMode=Insert;
+}
 
 @end
 
