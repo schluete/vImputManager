@@ -403,6 +403,15 @@
 }
 
 /**
+ * Changes the single character under the cursor to the text which follows up to 
+ * an <ESC>; given a count, that many characters from the current line are changed. 
+ */
+- (void)changeSingleCharacter {
+  [self deleteCharacter];
+  _viMode=Insert;
+}
+
+/**
  * Deletes the rest of the text on the current line; a synonym for d$. 
  */
 - (void)deleteEndOfLine {
@@ -484,6 +493,26 @@
   [self findCharacter];
   if([self cursorPosition]!=currPos)
     [self cursorLeft];
+}
+
+/**
+ * Deletes the single character under the cursor. With a count deletes deletes that
+ * many characters forward from the cursor position, but only on the current line (6.5). 
+ */
+- (void)deleteCharacter {
+  NSString *text=[[_textView textStorage] string];
+  int pos=[self cursorPosition],
+      count=(_currentCount>0 ? _currentCount:1),
+      startOfLine=[self findStartOfLine:pos],
+      endOfLine=[self findEndOfLine:pos];
+  if(pos==endOfLine && pos>startOfLine)
+    pos--;
+  if(pos+count>endOfLine)
+    count=endOfLine-pos;
+  if(count<=0)
+    return;
+  [_textView setSelectedRange:NSMakeRange(pos,count)];
+  [_textView delete:self];
 }
 
 @end

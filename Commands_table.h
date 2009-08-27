@@ -113,6 +113,10 @@ struct {
   // Changes the rest of the text on the current line; a synonym for c$. 
   {'C',FALSE,@"changeToEndOfLine"},
 
+  // Changes the single character under the cursor to the text which follows up to 
+  // an <ESC>; given a count, that many characters from the current line are changed. 
+  {'s',FALSE,@"changeSingleCharacter"},
+
   // Deletes the rest of the text on the current line; a synonym for d$. 
   {'D',FALSE,@"deleteEndOfLine"},
 
@@ -126,6 +130,10 @@ struct {
   // <d> and <c> to delete the characters up to a following character. One can use <.> to delete more if this 
   // doesn’t delete enough the first time (4.1). 
   {'t',FALSE,@"findAndStopBeforeCharacter"},
+
+  // Deletes the single character under the cursor. With a count deletes deletes that
+  // many characters forward from the cursor position, but only on the current line (6.5). 
+  {'x',FALSE,@"deleteCharacter"},
 
 
   // end-of-list marker, not used as a vi command
@@ -378,15 +386,9 @@ r   Replaces the single character at the cursor with a single character typed. T
     this is the easiest way to split lines. A count replaces each of the following count characters with the 
     single character given; see <R> above which is the more usually useful iteration of <r> (3.2). 
 
-s   Changes the single character under the cursor to the text which follows up to an <ESC>; given a count, that 
-    many characters from the current line are changed. The last character to be changed is marked with $ as in <c> (3.2). 
-
 u   Undoes the last change made to the current buffer. If repeated, will alternate between these two states, thus 
     is its own inverse. When used after an insert which inserted text on more than one line, the lines are saved
     in the numeric named buffers (3.5). 
-
-x   Deletes the single character under the cursor. With a count deletes deletes that many characters forward from 
-    the cursor position, but only on the current line (6.5). 
 
 z   Redraws the screen with the current line placed as specified by the following character: <CR> specifies the 
     top of the screen, <.> the center of the screen, and <!> at the bottom of the screen. A count may be given

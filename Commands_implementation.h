@@ -90,6 +90,9 @@
 // Changes the rest of the text on the current line; a synonym for c$. 
 - (void)changeToEndOfLine;
 
+// Changes the single character under the cursor 
+- (void)changeSingleCharacter;
+
 // Deletes the rest of the text on the current line; a synonym for d$. 
 - (void)deleteEndOfLine;
 
@@ -101,5 +104,8 @@
 
 // Advances the cursor up to the character before the next character typed
 - (void)findAndStopBeforeCharacter;
+
+// Deletes the single character under the cursor
+- (void)deleteCharacter;
 
 @end

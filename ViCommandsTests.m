@@ -59,6 +59,53 @@
 }
 
 /**
+ * delete of change single characters
+ */
+- (void)testDeleteOrChangeOfSingleCharacters {
+  // let's delete a single character
+  [self replaceText:@"the quick brown fox\njumps over the lazy dog"];
+  [self moveCursorTo:5];
+  [_cmds processInput:'x'];
+  STAssertEquals([self cursorPosition],(NSUInteger)5,@"invalid cursor location?!");
+  STAssertEqualObjects([self line:0],@"the qick brown fox\n",@"invalid line content?!");
+
+  // then we're going to delete multiple characters
+  [self replaceText:@"the quick brown fox\njumps over the lazy dog"];
+  [self moveCursorTo:5];
+  [_cmds processInput:'7'];
+  [_cmds processInput:'x'];
+  STAssertEquals([self cursorPosition],(NSUInteger)5,@"invalid cursor location?!");
+  STAssertEqualObjects([self line:0],@"the qown fox\n",@"invalid line content?!");
+
+  // we're deleting more characters then the line contains
+  [self replaceText:@"the quick brown fox\njumps over the lazy dog"];
+  [self moveCursorTo:5];
+  [_cmds processInput:'1'];
+  [_cmds processInput:'0'];
+  [_cmds processInput:'0'];
+  [_cmds processInput:'x'];
+  STAssertEquals([self cursorPosition],(NSUInteger)5,@"invalid cursor location?!");
+  STAssertEqualObjects([self line:0],@"the q\n",@"invalid line content?!");
+
+  // if we're at the end of the line the last character should disappear
+  [self replaceText:@"the quick brown fox\njumps over the lazy dog"];
+  [self moveCursorTo:19];
+  [_cmds processInput:'x'];
+  STAssertEquals([self cursorPosition],(NSUInteger)18,@"invalid cursor location?!");
+  STAssertEqualObjects([self line:0],@"the quick brown fo\n",@"invalid line content?!");
+
+  // finally let's see if the change of characters works
+  [self replaceText:@"the quick brown fox\njumps over the lazy dog"];
+  [self moveCursorTo:5];
+  [_cmds processInput:'3'];
+  [_cmds processInput:'s'];
+  [_textView insertText:@"foo"];
+  [_cmds processInput:0x1b];
+  STAssertEquals([self cursorPosition],(NSUInteger)8,@"invalid cursor location?!");
+  STAssertEqualObjects([self line:0],@"the qfook brown fox\n",@"invalid line content?!");
+}
+
+/**
  * move cursor to a given column
  */
 - (void)testMoveCursorToColumn {
