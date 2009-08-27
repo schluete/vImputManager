@@ -2,50 +2,68 @@
 //  Copyright 2009 pqrs.de, All rights reserved.
 
 #import "NSTextView_vImputManager.h"
-#import "KeyHandlerStorage.h"
-#import "KeyHandler.h"
+#import "Commands.h"
 #import "Logger.h"
 #import <time.h>
 
+// the global list of currently allocated command processors.
+static NSMutableDictionary *ViCommandProcessors=nil;
 
 @implementation NSTextView (vImputManager)
 
 /**
- * called by the keybinding to start the vi input mode. 
- *
- * To bind this message to a specific key you have to 
- * edit the default keybindings. These can be found 
- * in ~/Library/KeyBindings/DefaultKeyBinding.dict. To 
- * call this message add a custom keybinding like this:
- * "$\U001B" = "vImputManagerMode:";
+ * overload the destructor to release the command 
+ * processor instance associated with this text view.
  */
-- (void)vImputManagerMode:(id)sender {
-  [Logger log:@"the vim input mode was requested from <%@> at %ld!",sender,time(NULL)];
+- (void)dealloc {
+  [super dealloc];
+  [ViCommandProcessors removeObjectForKey:[NSNumber numberWithInt:(int)self]];
 }
 
 /**
  * intercept key events to handle vi input mode.
  */
 - (void)vImputManager_keyDown:(NSEvent *)event {
-  BOOL eventWasNotHandled=TRUE;
+  // first we need to get the characters to process
+  NSString *chars=[event charactersIgnoringModifiers];
+  unichar charCode=[chars characterAtIndex:0];
+  NSUInteger modifiers=[event modifierFlags];
 
-  KeyHandler *keyHandler=[[KeyHandlerStorage sharedInstance] findOrCreateHandlerFor:self];
-  if(keyHandler)
-    eventWasNotHandled=[keyHandler handleKeyDownEvent:event];
+  // get the command processor for this text view, allocate 
+  // a new one if none is currently present for the view.
+  if(!ViCommandProcessors)
+    ViCommandProcessors=[[NSMutableDictionary alloc] init];
+  NSNumber *myId=[NSNumber numberWithInt:(int)self];
+  Commands *processor=[ViCommandProcessors objectForKey:myId];
+  if(processor==nil) {
+    processor=[[Commands alloc] initWithTextView:self];
+    [ViCommandProcessors setObject:processor forKey:myId];
+  }
 
-  if(eventWasNotHandled)
+  // if we're not in command mode and the current input isn't 
+  // an ESC we're not going to handle this input by ourself
+  if([processor viMode]==Command || charCode==0x1b) {
+    BOOL isControl=(modifiers & NSControlKeyMask)>0;
+    [processor processInput:charCode withControl:isControl];
+  }
+
+  // otherwise let the event bubble up the handler hierarchie
+  else
     [self vImputManager_originalKeyDown:event];
 }
 
 /**
  * the garbage collector invokes this method before disposing 
  * of the memory it uses. We're overriding this method from 
- * NSTextView to ensure that the corresponding key handler gets
- * disposed.
+ * NSTextView to ensure that the corresponding command processor
+ * gets disposed.
  */
 - (void)vImputManager_finalize {
-  [Logger log:@"we're being finalized %@",self];
-  [[KeyHandlerStorage sharedInstance] releaseHandlerFor:self];
+  if(ViCommandProcessors) {
+    NSNumber *myId=[NSNumber numberWithInt:(int)self];
+    [ViCommandProcessors removeObjectForKey:myId];
+    [Logger log:@"finalized a processor <%@> for id <%x>",processor,[myId intValue]];
+  }
   [self vImputManager_originalFinalize];
 }
 
@@ -55,8 +73,11 @@
  * key handler gets disposed.
  */
 - (void)vImputManager_dealloc {
-  [Logger log:@"we're being deallocated %@",self];
-  [[KeyHandlerStorage sharedInstance] releaseHandlerFor:self];
+  if(ViCommandProcessors) {
+    NSNumber *myId=[NSNumber numberWithInt:(int)self];
+    [ViCommandProcessors removeObjectForKey:myId];
+    [Logger log:@"deallocated a processor <%@> for id <%x>",processor,[myId intValue]];
+  }
   [self vImputManager_originalDealloc];
 }
 

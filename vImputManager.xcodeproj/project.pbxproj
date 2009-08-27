@@ -13,8 +13,6 @@
 		6602E7B5104625ED004CED12 /* Commands.m in Sources */ = {isa = PBXBuildFile; fileRef = 669B28981042AE9D00864429 /* Commands.m */; };
 		6602E7B6104625ED004CED12 /* Commands_implementation.m in Sources */ = {isa = PBXBuildFile; fileRef = 669B289A1042AE9D00864429 /* Commands_implementation.m */; };
 		6602E7B7104625ED004CED12 /* NSTextView_vImputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 66414092103451F70017985F /* NSTextView_vImputManager.m */; };
-		6602E7B8104625ED004CED12 /* KeyHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 6641413C10347ED40017985F /* KeyHandler.m */; };
-		6602E7B9104625ED004CED12 /* KeyHandlerStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 66414148103482910017985F /* KeyHandlerStorage.m */; };
 		6641409C103454580017985F /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 6641409B103454580017985F /* Logger.m */; };
 		664140F61034730E0017985F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 664140F0103472B30017985F /* InfoPlist.strings */; };
 		664140F7103473130017985F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 664140F2103472B30017985F /* MainMenu.xib */; };
@@ -24,8 +22,6 @@
 		664141081034736E0017985F /* NSTextView_vImputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 66414092103451F70017985F /* NSTextView_vImputManager.m */; };
 		664141091034736E0017985F /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 6641409B103454580017985F /* Logger.m */; };
 		66414138103478750017985F /* PseudoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66414137103478750017985F /* PseudoController.m */; };
-		6641413E10347ED40017985F /* KeyHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 6641413C10347ED40017985F /* KeyHandler.m */; };
-		6641414A103482910017985F /* KeyHandlerStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 66414148103482910017985F /* KeyHandlerStorage.m */; };
 		669B289D1042AE9D00864429 /* Commands.m in Sources */ = {isa = PBXBuildFile; fileRef = 669B28981042AE9D00864429 /* Commands.m */; };
 		669B289E1042AE9D00864429 /* Commands_implementation.m in Sources */ = {isa = PBXBuildFile; fileRef = 669B289A1042AE9D00864429 /* Commands_implementation.m */; };
 		669B29261042B60500864429 /* ViCommandsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 669B28C31042B00900864429 /* ViCommandsTests.m */; };
@@ -60,10 +56,6 @@
 		664140F3103472B30017985F /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = TestApplication/English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		66414136103478750017985F /* PseudoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PseudoController.h; path = TestApplication/PseudoController.h; sourceTree = "<group>"; };
 		66414137103478750017985F /* PseudoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PseudoController.m; path = TestApplication/PseudoController.m; sourceTree = "<group>"; };
-		6641413B10347ED40017985F /* KeyHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyHandler.h; sourceTree = "<group>"; };
-		6641413C10347ED40017985F /* KeyHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyHandler.m; sourceTree = "<group>"; };
-		66414147103482910017985F /* KeyHandlerStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyHandlerStorage.h; sourceTree = "<group>"; };
-		66414148103482910017985F /* KeyHandlerStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyHandlerStorage.m; sourceTree = "<group>"; };
 		669B28971042AE9D00864429 /* Commands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Commands.h; sourceTree = "<group>"; };
 		669B28981042AE9D00864429 /* Commands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Commands.m; sourceTree = "<group>"; };
 		669B28991042AE9D00864429 /* Commands_implementation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Commands_implementation.h; sourceTree = "<group>"; };
@@ -160,10 +152,6 @@
 				66414092103451F70017985F /* NSTextView_vImputManager.m */,
 				6641409A103454580017985F /* Logger.h */,
 				6641409B103454580017985F /* Logger.m */,
-				6641413B10347ED40017985F /* KeyHandler.h */,
-				6641413C10347ED40017985F /* KeyHandler.m */,
-				66414147103482910017985F /* KeyHandlerStorage.h */,
-				66414148103482910017985F /* KeyHandlerStorage.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -364,8 +352,6 @@
 				664141091034736E0017985F /* Logger.m in Sources */,
 				664140F8103473240017985F /* main.m in Sources */,
 				66414138103478750017985F /* PseudoController.m in Sources */,
-				6641413E10347ED40017985F /* KeyHandler.m in Sources */,
-				6641414A103482910017985F /* KeyHandlerStorage.m in Sources */,
 				669B289D1042AE9D00864429 /* Commands.m in Sources */,
 				669B289E1042AE9D00864429 /* Commands_implementation.m in Sources */,
 				6602E67D104539FE004CED12 /* Commands_operators.m in Sources */,
@@ -392,8 +378,6 @@
 				6602E7B5104625ED004CED12 /* Commands.m in Sources */,
 				6602E7B6104625ED004CED12 /* Commands_implementation.m in Sources */,
 				6602E7B7104625ED004CED12 /* NSTextView_vImputManager.m in Sources */,
-				6602E7B8104625ED004CED12 /* KeyHandler.m in Sources */,
-				6602E7B9104625ED004CED12 /* KeyHandlerStorage.m in Sources */,
 				669CE9AB10339C0900FDAD13 /* BundlePrincipal.m in Sources */,
 				6641409C103454580017985F /* Logger.m in Sources */,
 			);

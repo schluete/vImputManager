@@ -216,10 +216,11 @@
  * or a sequence of special characters. A count repeats the effect (2.4). 
  */
 - (void)wordForward {
-  NSMutableCharacterSet *wordChars=[[[NSMutableCharacterSet alloc] init] autorelease];
+  NSMutableCharacterSet *wordChars=[[NSMutableCharacterSet alloc] init];
   [wordChars formUnionWithCharacterSet:[NSCharacterSet alphanumericCharacterSet]];
   [wordChars addCharactersInString:@"_"];
   [self wordForwardWithWordCharacters:wordChars];
+  [wordChars release];
 }
 
 /**
@@ -275,10 +276,11 @@
  * alphanumerics, or a sequence of special characters. A count repeats the effect (2.4). 
  */
 - (void)wordBackward {
-  NSMutableCharacterSet *wordChars=[[[NSMutableCharacterSet alloc] init] autorelease];
+  NSMutableCharacterSet *wordChars=[[NSMutableCharacterSet alloc] init];
   [wordChars formUnionWithCharacterSet:[NSCharacterSet alphanumericCharacterSet]];
   [wordChars addCharactersInString:@"_"];
   [self wordBackwardWithWordCharacters:wordChars];
+  [wordChars release];
 }
 
 /**
@@ -346,7 +348,7 @@
 
   // then get the current content and swap its case.
   NSString *text=[[_textView textStorage] string];
-  NSMutableString *result=[[[NSMutableString alloc] initWithCapacity:swapRange.length] autorelease];
+  NSMutableString *result=[[NSMutableString alloc] initWithCapacity:swapRange.length];
   for(int i=0;i<count;i++) {
     NSString *singleChar=[text substringWithRange:NSMakeRange(startPos+i,1)];
     if([singleChar isEqualToString:[singleChar lowercaseString]])
@@ -359,6 +361,7 @@
   [_textView replaceCharactersInRange:swapRange
                            withString:result];
   [self moveCursorTo:(startPos+count)];
+  [result release];
 }
 
 /**

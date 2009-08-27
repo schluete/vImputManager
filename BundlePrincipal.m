@@ -5,7 +5,6 @@
 #import <objc/objc-class.h>
 #import "Logger.h"
 
-
 @implementation BundlePrincipal
 
 /**
