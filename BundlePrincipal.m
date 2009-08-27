@@ -21,9 +21,11 @@
   // install our own handlers by exchanging the NSTextView
   // keyDown: method implementation with our own version if 
   // this is the TextEdit.app
+#if 0
   if(([bundleID isEqualToString:@"com.apple.TextEdit"] && version==244.0) ||
      ([bundleID isEqualToString:@"com.apple.Xcode"] && version==1191.0) ||
      ([bundleID isEqualToString:@"com.apple.mail"] && version==936.0)) 
+#endif
   {
     [self renameMethods];
     [Logger log:@"vi input mode successfully installed"];
