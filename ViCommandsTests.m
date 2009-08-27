@@ -59,6 +59,39 @@
 }
 
 /**
+ * replace single characters 
+ */
+- (void)testReplacementOfSingleCharacters {
+  // let's replace a single character
+  [self replaceText:@"the quick brown fox\njumps over the lazy dog"];
+  [self moveCursorTo:5];
+  [_cmds processInput:'r'];
+  [_cmds processInput:'f'];
+  STAssertEquals([self cursorPosition],(NSUInteger)5,@"invalid cursor location?!");
+  STAssertEqualObjects([self line:0],@"the qfick brown fox\n",@"invalid line content?!");
+
+  // then let's replace multiple characters
+  [self replaceText:@"the quick brown fox\njumps over the lazy dog"];
+  [self moveCursorTo:5];
+  [_cmds processInput:'3'];
+  [_cmds processInput:'r'];
+  [_cmds processInput:'f'];
+  STAssertEquals([self cursorPosition],(NSUInteger)7,@"invalid cursor location?!");
+  STAssertEqualObjects([self line:0],@"the qfffk brown fox\n",@"invalid line content?!");
+
+  // then we're replacing the whole line
+  [self replaceText:@"the quick brown fox\njumps over the lazy dog"];
+  [self moveCursorTo:5];
+  [_cmds processInput:'1'];
+  [_cmds processInput:'0'];
+  [_cmds processInput:'0'];
+  [_cmds processInput:'r'];
+  [_cmds processInput:'f'];
+  STAssertEquals([self cursorPosition],(NSUInteger)18,@"invalid cursor location?!");
+  STAssertEqualObjects([self line:0],@"the qffffffffffffff\n",@"invalid line content?!");
+}
+
+/**
  * delete of change single characters
  */
 - (void)testDeleteOrChangeOfSingleCharacters {

@@ -108,4 +108,10 @@
 // Deletes the single character under the cursor
 - (void)deleteCharacter;
 
+// Replaces the single character at the cursor
+- (void)replaceCharacter;
+
+// determine the range to modify for single character operations
+- (NSRange)rangeForSingleCharacterOperations;
+
 @end

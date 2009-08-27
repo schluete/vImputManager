@@ -357,7 +357,7 @@
  
   // finally replace the original content with the swapped version
   [_textView replaceCharactersInRange:swapRange
-                          withString:result];
+                           withString:result];
   [self moveCursorTo:(startPos+count)];
 }
 
@@ -500,7 +500,53 @@
  * many characters forward from the cursor position, but only on the current line (6.5). 
  */
 - (void)deleteCharacter {
-  NSString *text=[[_textView textStorage] string];
+  NSRange deleteRange=[self rangeForSingleCharacterOperations];
+  if(deleteRange.location!=NSNotFound) {
+    [_textView setSelectedRange:deleteRange];
+    [_textView delete:self];
+  }
+}
+
+/**
+ * Replaces the single character at the cursor with a single character typed. The new character 
+ * may be a <RETURN>; this is the easiest way to split lines. A count replaces each of the following 
+ * count characters with the single character given; see <R> above which is the more usually useful 
+ * iteration of <r> (3.2). 
+ */
+- (void)replaceCharacter {
+  // we need a second char
+  if(!_waitingForFurtherInput) {
+    _waitingForFurtherInput=TRUE;
+    return;
+  }
+
+  // otherwise we're going to determine the range to replace
+  _waitingForFurtherInput=FALSE;
+  NSRange changeRange=[self rangeForSingleCharacterOperations];
+  if(changeRange.location==NSNotFound || changeRange.length<=0)
+    return;
+
+  // create the replacement, then insert it
+  NSMutableString *replacement=[NSMutableString stringWithCapacity:changeRange.length];
+  for(int i=0;i<changeRange.length;i++)
+    [replacement appendFormat:@"%c",_currentInput];
+  [_textView replaceCharactersInRange:changeRange
+                           withString:replacement];
+
+  // finally readjust teh cursor location
+  int startOfLine=[self findStartOfLine:[self cursorPosition]];
+  if(--changeRange.location<startOfLine)
+    [self moveCursorTo:startOfLine];
+  else
+    [self moveCursorTo:(changeRange.location+changeRange.length)];
+}
+
+/**
+ * determine the range to modify for single character operations like <x>, <s> or <r>.
+ * The range runs from the cursor position to currentCount characters or to the end 
+ * of the current line depending which is reached first.
+ */
+- (NSRange)rangeForSingleCharacterOperations {
   int pos=[self cursorPosition],
       count=(_currentCount>0 ? _currentCount:1),
       startOfLine=[self findStartOfLine:pos],
@@ -510,10 +556,10 @@
   if(pos+count>endOfLine)
     count=endOfLine-pos;
   if(count<=0)
-    return;
-  [_textView setSelectedRange:NSMakeRange(pos,count)];
-  [_textView delete:self];
+    return NSMakeRange(NSNotFound,0);
+  return NSMakeRange(pos,count);
 }
+
 
 @end
 

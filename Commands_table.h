@@ -135,6 +135,11 @@ struct {
   // many characters forward from the cursor position, but only on the current line (6.5). 
   {'x',FALSE,@"deleteCharacter"},
 
+  // Replaces the single character at the cursor with a single character typed. The new character 
+  // may be a <RETURN>; this is the easiest way to split lines. A count replaces each of the following 
+  // count characters with the single character given; see <R> above which is the more usually useful 
+  // iteration of <r> (3.2). 
+  {'r',FALSE,@"replaceCharacter"},
 
   // end-of-list marker, not used as a vi command
   {0,FALSE,nil}
@@ -381,10 +386,6 @@ n   Repeats the last </> or <?> scanning commands (2.2).
 o   Opens new lines below the current line; otherwise like <O> (3.1). 
 
 p   Puts text after/ below the cursor; otherwise like <P> (6.3). 
-
-r   Replaces the single character at the cursor with a single character typed. The new character may be a <RETURN>;
-    this is the easiest way to split lines. A count replaces each of the following count characters with the 
-    single character given; see <R> above which is the more usually useful iteration of <r> (3.2). 
 
 u   Undoes the last change made to the current buffer. If repeated, will alternate between these two states, thus 
     is its own inverse. When used after an insert which inserted text on more than one line, the lines are saved
