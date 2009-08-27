@@ -38,6 +38,7 @@ static NSMutableDictionary *ViCommandProcessors=nil;
   if(processor==nil) {
     processor=[[Commands alloc] initWithTextView:self];
     [ViCommandProcessors setObject:processor forKey:myId];
+[Logger log:@"allocated a new processor <%@> for id <%x>",processor,[myId intValue]];
   }
 
   // if we're not in command mode and the current input isn't 
@@ -61,12 +62,10 @@ static NSMutableDictionary *ViCommandProcessors=nil;
 - (void)vImputManager_finalize {
   if(ViCommandProcessors) {
     NSNumber *myId=[NSNumber numberWithInt:(int)self];
-Commands *processor=[ViCommandProcessors objectForKey:myId];
-[Logger log:@"finalized a processor <%@> for id <%x>",processor,[myId intValue]];
+[Logger log:@"finalized a processor <%@> for id <%x>",[ViCommandProcessors objectForKey:myId],[myId intValue]];
     [ViCommandProcessors removeObjectForKey:myId];
   }
-  else
-    NSLog(@"trying to finalize processor but no list of processors found?!");
+else NSLog(@"trying to finalize processor but no list of processors found?!");
 
   [self vImputManager_originalFinalize];
 }
@@ -79,12 +78,10 @@ Commands *processor=[ViCommandProcessors objectForKey:myId];
 - (void)vImputManager_dealloc {
   if(ViCommandProcessors) {
     NSNumber *myId=[NSNumber numberWithInt:(int)self];
-Commands *processor=[ViCommandProcessors objectForKey:myId];
-[Logger log:@"deallocated a processor <%@> for id <%x>",processor,[myId intValue]];
+[Logger log:@"deallocated a processor <%@> for id <%x>",[ViCommandProcessors objectForKey:myId],[myId intValue]];
     [ViCommandProcessors removeObjectForKey:myId];
   }
-  else
-    NSLog(@"trying to deallocate processor but no list of processors found?!");
+else NSLog(@"trying to deallocate processor but no list of processors found?!");
 
   [self vImputManager_originalDealloc];
 }
