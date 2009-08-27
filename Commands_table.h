@@ -40,6 +40,7 @@ struct {
   // Moves the cursor one line down in the same column. If the position does not exist, vi 
   // comes as close as possible to the same column. A count repeats the effect.
   {'j',FALSE,@"cursorDown"},
+  {'+',FALSE,@"cursorDown"},
   {'n',TRUE,@"cursorDown"},
   {'j',TRUE,@"cursorDown"},
   {NSDownArrowFunctionKey,FALSE,@"cursorDown"},
@@ -148,6 +149,12 @@ struct {
   // terminals to specify a number of lines to be opened; this is generally obsolete, as the slowopen option 
   // works better (3.1). 
   {'O',FALSE,@"openNewLineAbove"},
+
+  // Joins together lines, supplying appropriate white space: one space between words, two spaces after a., and 
+  // no spaces at all if the first character of the joined on line is ). A count causes that many lines to be 
+  // joined rather than the default two (6.5, 7.1f). 
+  {'J',FALSE,@"joinLines"},
+
 
 
   // end-of-list marker, not used as a vi command
@@ -283,8 +290,6 @@ List of operators in VIM:
     3) the non-blank word under the cursor, 4) the first non-blank word after the cursor in the current line. Only
     whole keywords are searched for, like with the command "/\<keyword\>".
 
-+   Same as <CR> when used as a command. 
-
 ,   Reverse of the last fFt or T command, looking the other way in the current line. Especially useful after 
     hitting too many ; characters. A count repeats the search. 
 
@@ -330,10 +335,6 @@ List of operators in VIM:
 H   (or <Home>). Homes the cursor to the top line on the screen. If a count is given, then the cursor is moved to
     the count’th line on the screen. In any case the cursor is moved to the first non-white character on the 
     line. If used as the target of an operator, full lines are affected (2.3, 3.2). 
-
-J   Joins together lines, supplying appropriate white space: one space between words, two spaces after a., and 
-    no spaces at all if the first character of the joined on line is ). A count causes that many lines to be 
-    joined rather than the default two (6.5, 7.1f). 
 
 L   Moves the cursor to the first non-white character of the last line on the screen. With a count, to the first 
     non-white of the count’th line from the bottom. Operators affect whole lines when used with L(2.3). 

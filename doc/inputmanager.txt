@@ -1,7 +1,8 @@
 
 Was ist ein InputManager?
 
-- liegt als Directory in /Library/InputManagers/vImputManager/
+- liegt als Directory in /Library/InputManagers/vImputManager/, alle Dateien
+und Dirs dort muessen root:admin gehoeren
 
 
 - zwei Bestandteile, eine Property-Datei ".../vImputManager/Info"

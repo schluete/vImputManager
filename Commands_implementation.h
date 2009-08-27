@@ -120,4 +120,7 @@
 // opens a newline above the current line
 - (void)openNewLineAbove;
 
+// joins together lines
+- (void)joinLines;
+
 @end

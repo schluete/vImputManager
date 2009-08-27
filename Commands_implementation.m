@@ -586,5 +586,34 @@
   _viMode=Insert;
 }
 
+/**
+ * Joins together lines, supplying appropriate white space: one space between words, two spaces after a., and 
+ * no spaces at all if the first character of the joined on line is ). A count causes that many lines to be 
+ * joined rather than the default two (6.5, 7.1f). 
+ */
+- (void)joinLines {
+  NSString *text=[[_textView textStorage] string];
+
+  int count=(_currentCount>0 ? _currentCount:1);
+  for(int i=0;i<count;i++) {
+    // find the end of the current line including all whitespaces at 
+    // the beginning of the next line
+    int endOfLine=[self findEndOfLine:[self cursorPosition]];
+    if(endOfLine+1>=[text length])
+      return;
+    int numOfCharsInNextLine=[self findEndOfLine:(endOfLine+1)]-(endOfLine+1);
+    NSRange nonSpace=[text rangeOfCharacterFromSet:[[NSCharacterSet whitespaceCharacterSet] invertedSet]
+                                           options:0
+                                             range:NSMakeRange(endOfLine+1,numOfCharsInNextLine)];
+    if(nonSpace.location!=endOfLine+1) {
+      int whitespaceCount=nonSpace.location-endOfLine;
+      [_textView setSelectedRange:NSMakeRange(endOfLine,whitespaceCount)];
+    }
+    else
+      [_textView setSelectedRange:NSMakeRange(endOfLine,1)];
+    [_textView delete:self];
+  }
+}
+
 @end
 
