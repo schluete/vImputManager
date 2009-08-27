@@ -47,6 +47,7 @@
   [self replaceText:@"the quick brown fox jumps over the lazy doc"];
   [self moveCursorToStart];
   _cmds=[[Commands alloc] initWithTextView:_textView];
+  [_cmds processInput:0x1b];
 }
  
 /**

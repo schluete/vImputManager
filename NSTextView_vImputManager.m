@@ -61,9 +61,13 @@ static NSMutableDictionary *ViCommandProcessors=nil;
 - (void)vImputManager_finalize {
   if(ViCommandProcessors) {
     NSNumber *myId=[NSNumber numberWithInt:(int)self];
+Commands *processor=[ViCommandProcessors objectForKey:myId];
+[Logger log:@"finalized a processor <%@> for id <%x>",processor,[myId intValue]];
     [ViCommandProcessors removeObjectForKey:myId];
-    [Logger log:@"finalized a processor <%@> for id <%x>",processor,[myId intValue]];
   }
+  else
+    NSLog(@"trying to finalize processor but no list of processors found?!");
+
   [self vImputManager_originalFinalize];
 }
 
@@ -75,9 +79,13 @@ static NSMutableDictionary *ViCommandProcessors=nil;
 - (void)vImputManager_dealloc {
   if(ViCommandProcessors) {
     NSNumber *myId=[NSNumber numberWithInt:(int)self];
+Commands *processor=[ViCommandProcessors objectForKey:myId];
+[Logger log:@"deallocated a processor <%@> for id <%x>",processor,[myId intValue]];
     [ViCommandProcessors removeObjectForKey:myId];
-    [Logger log:@"deallocated a processor <%@> for id <%x>",processor,[myId intValue]];
   }
+  else
+    NSLog(@"trying to deallocate processor but no list of processors found?!");
+
   [self vImputManager_originalDealloc];
 }
 

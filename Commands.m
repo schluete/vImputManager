@@ -18,12 +18,13 @@
 
   [aTextView retain];
   _textView=aTextView;
-  _viMode=Command;
 
   [self initializeCommandsTable];
   _countBuffer=[[NSMutableString alloc] initWithCapacity:10];
   _temporaryBuffer=[[NSMutableString alloc] initWithCapacity:10];
   [self escape];
+
+  _viMode=Insert;
   return self; 
 }
 
