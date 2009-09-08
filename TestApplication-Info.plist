@@ -20,5 +20,10 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>InstallationBlacklist</key>
+	<array>
+		<string>xcode</string>
+		<string>macvim</string>
+	</array>
 </dict>
 </plist>

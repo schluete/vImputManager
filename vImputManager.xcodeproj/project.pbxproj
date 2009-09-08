@@ -18,7 +18,6 @@
 		664140F7103473130017985F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 664140F2103472B30017985F /* MainMenu.xib */; };
 		664140F8103473240017985F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 664140EE103472970017985F /* main.m */; };
 		664140F91034732E0017985F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
-		664141071034736E0017985F /* BundlePrincipal.m in Sources */ = {isa = PBXBuildFile; fileRef = 669CE9AA10339C0900FDAD13 /* BundlePrincipal.m */; };
 		664141081034736E0017985F /* NSTextView_vImputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 66414092103451F70017985F /* NSTextView_vImputManager.m */; };
 		664141091034736E0017985F /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 6641409B103454580017985F /* Logger.m */; };
 		66414138103478750017985F /* PseudoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66414137103478750017985F /* PseudoController.m */; };
@@ -29,6 +28,9 @@
 		669B29401042BD8600864429 /* Commands_implementation.m in Sources */ = {isa = PBXBuildFile; fileRef = 669B289A1042AE9D00864429 /* Commands_implementation.m */; };
 		669B29411042BD8600864429 /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 6641409B103454580017985F /* Logger.m */; };
 		669CE9AB10339C0900FDAD13 /* BundlePrincipal.m in Sources */ = {isa = PBXBuildFile; fileRef = 669CE9AA10339C0900FDAD13 /* BundlePrincipal.m */; };
+		66F3702F10571C6700D0BAB3 /* Blacklist.plist in Resources */ = {isa = PBXBuildFile; fileRef = 66F3702E10571C6700D0BAB3 /* Blacklist.plist */; };
+		66F3703010571C6700D0BAB3 /* Blacklist.plist in Resources */ = {isa = PBXBuildFile; fileRef = 66F3702E10571C6700D0BAB3 /* Blacklist.plist */; };
+		66F3703110571C6700D0BAB3 /* Blacklist.plist in Resources */ = {isa = PBXBuildFile; fileRef = 66F3702E10571C6700D0BAB3 /* Blacklist.plist */; };
 		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -68,6 +70,7 @@
 		669B29221042B5EF00864429 /* Testing-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Testing-Info.plist"; sourceTree = "<group>"; };
 		669CE9A910339C0900FDAD13 /* BundlePrincipal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BundlePrincipal.h; sourceTree = "<group>"; };
 		669CE9AA10339C0900FDAD13 /* BundlePrincipal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BundlePrincipal.m; sourceTree = "<group>"; };
+		66F3702E10571C6700D0BAB3 /* Blacklist.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Blacklist.plist; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* vImputManager.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vImputManager.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D2F7E65807B2D6F200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
@@ -131,6 +134,7 @@
 			children = (
 				8D5B49B7048680CD000E48DA /* Info.plist */,
 				089C167DFE841241C02AAC07 /* InfoPlist.strings */,
+				66F3702E10571C6700D0BAB3 /* Blacklist.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -306,6 +310,7 @@
 			files = (
 				664140F7103473130017985F /* MainMenu.xib in Resources */,
 				664140F61034730E0017985F /* InfoPlist.strings in Resources */,
+				66F3703010571C6700D0BAB3 /* Blacklist.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,6 +318,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66F3702F10571C6700D0BAB3 /* Blacklist.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,6 +327,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */,
+				66F3703110571C6700D0BAB3 /* Blacklist.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,7 +354,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				664141071034736E0017985F /* BundlePrincipal.m in Sources */,
 				664141081034736E0017985F /* NSTextView_vImputManager.m in Sources */,
 				664141091034736E0017985F /* Logger.m in Sources */,
 				664140F8103473240017985F /* main.m in Sources */,

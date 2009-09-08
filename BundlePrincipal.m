@@ -13,23 +13,21 @@
 + (void)load {
   // let's get some informations about our current host app
   NSBundle *hostApp=[NSBundle mainBundle];
-  NSString *bundleID=[hostApp bundleIdentifier];
+  NSString *bundleId=[hostApp bundleIdentifier];
   NSDictionary *infoDict=[hostApp infoDictionary];
   float version=[[infoDict valueForKey:@"CFBundleVersion"] floatValue];
-  [Logger log:@"we were loaded for <%@>, version <%f>",bundleID,version];
+  [Logger log:@"we were loaded for <%@>, version <%f>",bundleId,version];
+
+  // if the current application is blacklisted let's do nothing
+  if([self isBlacklistedHostApplication:bundleId]) {
+    [Logger log:@"application is blacklisted, ignore it!"];
+    return;
+  }
 
   // install our own handlers by exchanging the NSTextView
-  // keyDown: method implementation with our own version if 
-  // this is the TextEdit.app
-#if 0
-  if(([bundleID isEqualToString:@"com.apple.TextEdit"] && version==244.0) ||
-     ([bundleID isEqualToString:@"com.apple.Xcode"] && version==1191.0) ||
-     ([bundleID isEqualToString:@"com.apple.mail"] && version==936.0)) 
-#endif
-  {
-    [self renameMethods];
-    [Logger log:@"vi input mode successfully installed"];
-  }
+  // keyDown: method implementation with our own version
+  [self renameMethods];
+  [Logger log:@"vi input mode successfully installed"];
 }
 
 /**
@@ -73,6 +71,40 @@
 		return FALSE;
 	method->method_name=newSel;
 	return TRUE;
+}
+
+/**
+ * read the blacklist property list and validate the given 
+ * host application name against the list. If the application 
+ * appears on the list the methods returns TRUE, otherwise
+ * FALSE will be returned.
+ */
++ (BOOL)isBlacklistedHostApplication:(NSString *)appId {
+  // find the blacklist file and read its raw data
+  NSBundle *bundle=[NSBundle bundleWithIdentifier:@"de.pqrs.vImputManager"];
+  NSString *plistPath=[bundle pathForResource:@"Blacklist" ofType:@"plist"];
+  NSData *plistXML=[[NSFileManager defaultManager] contentsAtPath:plistPath];
+
+  // then parse the blacklist file as a plist and 
+  // return the entries
+  NSString *errorDesc=nil;
+  NSPropertyListFormat format;
+  NSDictionary *plist=(NSDictionary *)[NSPropertyListSerialization 
+    propertyListFromData:plistXML
+        mutabilityOption:NSPropertyListMutableContainersAndLeaves
+                  format:&format
+        errorDescription:&errorDesc];
+  if(!plist)
+    return false;
+  NSArray *entries=[plist objectForKey:@"Entries"];
+  if(!entries)
+    return false;
+
+  // finally check the given app name against the list entries
+  for(NSString *entry in entries)
+    if([entry isEqualToString:appId])
+      return true;
+  return false;
 }
 
 @end

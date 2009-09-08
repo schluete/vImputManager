@@ -16,6 +16,18 @@
                                      from:@selector(vImputManager_keyDown:)
                                        to:@selector(keyDown:)];
   [Logger log:@"vi input mode successfully installed for test application"];
+
+  NSString *plistPath=[[NSBundle mainBundle] pathForResource:@"Blacklist" ofType:@"plist"];
+  NSData *plistXML=[[NSFileManager defaultManager] contentsAtPath:plistPath];
+  NSString *errorDesc=nil;
+  NSPropertyListFormat format;
+  NSDictionary *plist=(NSDictionary *)[NSPropertyListSerialization 
+    propertyListFromData:plistXML
+        mutabilityOption:NSPropertyListMutableContainersAndLeaves
+                  format:&format
+        errorDescription:&errorDesc];
+  NSArray *entries=[plist objectForKey:@"Entries"];
+  [Logger log:@"the blacklist data is <%@>",entries];
 }
 
 /**

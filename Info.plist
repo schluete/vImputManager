@@ -22,5 +22,10 @@
 	<string>1.0</string>
 	<key>NSPrincipalClass</key>
 	<string>BundlePrincipal</string>
+	<key>InstallationBlacklist</key>
+	<array>
+		<string>xcode</string>
+		<string>macvim</string>
+	</array>
 </dict>
 </plist>
