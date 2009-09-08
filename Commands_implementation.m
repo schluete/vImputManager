@@ -223,8 +223,11 @@
 
   // the second char has to be another 'g', otherwise nothing happens
   _waitingForFurtherInput=FALSE;
-  if(_currentInput=='g')
+  if(_currentInput=='g') {
+    if(_currentCount==0)
+      _currentCount=1;
     [self goToLine];
+  }
 }
 
 /**
