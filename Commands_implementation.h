@@ -57,6 +57,9 @@
 // go to a specific line or to the end of the file
 - (void)goToLine;
 
+// go to a specific line or to the end of the file with the "gg" command
+- (void)goToLineVim;
+
 // move a word forward in the current line
 - (void)wordForward;
 

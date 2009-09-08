@@ -212,6 +212,22 @@
 }
 
 /**
+ * go to a specific line or to the end of the file with the "gg" command
+ */
+- (void)goToLineVim {
+  // we need a second char
+  if(!_waitingForFurtherInput) {
+    _waitingForFurtherInput=TRUE;
+    return;
+  }
+
+  // the second char has to be another 'g', otherwise nothing happens
+  _waitingForFurtherInput=FALSE;
+  if(_currentInput=='g')
+    [self goToLine];
+}
+
+/**
  * Advances to the beginning of the next word. A word is a sequence of alphanumerics, 
  * or a sequence of special characters. A count repeats the effect (2.4). 
  */

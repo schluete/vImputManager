@@ -77,6 +77,10 @@ struct {
   // The screen is redrawn with the new current line in the center if necessary (7.2). 
   {'G',FALSE,@"goToLine"},
 
+  // The g command is a VIM speciality. It has many different meanings, but we're currently only 
+  // implementing the "gg" command, which is an equivalent to "G"
+  {'g',FALSE,@"goToLineVim"},
+
   // Backs up to the beginning of a word in the current line. A word is a sequence of alphanumerics, or a sequence 
   // of special characters (<B>: words are composed of non-blank sequences). A count repeats the effect (2.4). 
   {'b',FALSE,@"wordBackward"},
