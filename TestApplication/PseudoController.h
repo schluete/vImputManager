@@ -15,4 +15,10 @@
 
 - (void)awakeFromNib;
 
+// exchange two method implementation on NSTextView
++ (BOOL)swizzleTextViewMethodFrom:(SEL)originalSel to:(SEL)newSel;
+
+// exchange two method implementation on the given class
++ (BOOL)swizzleMethodsOfClass:(Class)clazz from:(SEL)originalSel to:(SEL)newSel;
+
 @end

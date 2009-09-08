@@ -29,6 +29,16 @@ static NSMutableDictionary *ViCommandProcessors=nil;
   unichar charCode=[chars characterAtIndex:0];
   NSUInteger modifiers=[event modifierFlags];
 
+#if 0
+  // if we got an ESC with the shift key pressed we're 
+  // removing the shift modifier and letting the event
+  // bubble up to restore the original ESC functionality
+  if(charCode==0x1b && (modifiers&NSShiftKeyMask)) {
+    [self vImputManager_originalKeyDown:event];
+    return;
+  }
+#endif
+
   // get the command processor for this text view, allocate 
   // a new one if none is currently present for the view.
   if(!ViCommandProcessors)
