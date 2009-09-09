@@ -19,7 +19,7 @@
   [Logger log:@"we were loaded for <%@>, version <%f>",bundleId,version];
 
   // if the current application is blacklisted let's do nothing
-  if([self isBlacklistedHostApplication:bundleId]) {
+  if(![self isHostApplicationAllowed:bundleId]) {
     [Logger log:@"application is blacklisted, ignore it!"];
     return;
   }
@@ -74,15 +74,15 @@
 }
 
 /**
- * read the blacklist property list and validate the given 
+ * read the whitelist property list and validate the given 
  * host application name against the list. If the application 
  * appears on the list the methods returns TRUE, otherwise
  * FALSE will be returned.
  */
-+ (BOOL)isBlacklistedHostApplication:(NSString *)appId {
++ (BOOL)isHostApplicationAllowed:(NSString *)appId {
   // find the blacklist file and read its raw data
   NSBundle *bundle=[NSBundle bundleWithIdentifier:@"de.pqrs.vImputManager"];
-  NSString *plistPath=[bundle pathForResource:@"Blacklist" ofType:@"plist"];
+  NSString *plistPath=[bundle pathForResource:@"Whitelist" ofType:@"plist"];
   NSData *plistXML=[[NSFileManager defaultManager] contentsAtPath:plistPath];
 
   // then parse the blacklist file as a plist and 

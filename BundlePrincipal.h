@@ -18,7 +18,7 @@
 // exchange two method implementation on the given class
 + (BOOL)swizzleMethodsOfClass:(Class)clazz from:(SEL)originalSel to:(SEL)newSel;
 
-// check if the given application is blacklisted 
-+ (BOOL)isBlacklistedHostApplication:(NSString *)appId;
+// check if the given application is whitelisted 
++ (BOOL)isHostApplicationAllowed:(NSString *)appId;
 
 @end

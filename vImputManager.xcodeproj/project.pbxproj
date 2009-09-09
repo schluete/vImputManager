@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		660087AE1057C88F0013DF46 /* Whitelist.plist in Resources */ = {isa = PBXBuildFile; fileRef = 660087AD1057C88F0013DF46 /* Whitelist.plist */; };
+		660087AF1057C88F0013DF46 /* Whitelist.plist in Resources */ = {isa = PBXBuildFile; fileRef = 660087AD1057C88F0013DF46 /* Whitelist.plist */; };
+		660087B01057C88F0013DF46 /* Whitelist.plist in Resources */ = {isa = PBXBuildFile; fileRef = 660087AD1057C88F0013DF46 /* Whitelist.plist */; };
 		6602E67D104539FE004CED12 /* Commands_operators.m in Sources */ = {isa = PBXBuildFile; fileRef = 6602E67C104539FE004CED12 /* Commands_operators.m */; };
 		6602E67F104539FE004CED12 /* Commands_operators.m in Sources */ = {isa = PBXBuildFile; fileRef = 6602E67C104539FE004CED12 /* Commands_operators.m */; };
 		6602E7B4104625ED004CED12 /* Commands_operators.m in Sources */ = {isa = PBXBuildFile; fileRef = 6602E67C104539FE004CED12 /* Commands_operators.m */; };
@@ -28,9 +31,6 @@
 		669B29401042BD8600864429 /* Commands_implementation.m in Sources */ = {isa = PBXBuildFile; fileRef = 669B289A1042AE9D00864429 /* Commands_implementation.m */; };
 		669B29411042BD8600864429 /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = 6641409B103454580017985F /* Logger.m */; };
 		669CE9AB10339C0900FDAD13 /* BundlePrincipal.m in Sources */ = {isa = PBXBuildFile; fileRef = 669CE9AA10339C0900FDAD13 /* BundlePrincipal.m */; };
-		66F3702F10571C6700D0BAB3 /* Blacklist.plist in Resources */ = {isa = PBXBuildFile; fileRef = 66F3702E10571C6700D0BAB3 /* Blacklist.plist */; };
-		66F3703010571C6700D0BAB3 /* Blacklist.plist in Resources */ = {isa = PBXBuildFile; fileRef = 66F3702E10571C6700D0BAB3 /* Blacklist.plist */; };
-		66F3703110571C6700D0BAB3 /* Blacklist.plist in Resources */ = {isa = PBXBuildFile; fileRef = 66F3702E10571C6700D0BAB3 /* Blacklist.plist */; };
 		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -41,6 +41,7 @@
 		089C167FFE841241C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		32DBCF630370AF2F00C91783 /* vImputManager_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vImputManager_Prefix.pch; sourceTree = "<group>"; };
+		660087AD1057C88F0013DF46 /* Whitelist.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Whitelist.plist; sourceTree = "<group>"; };
 		6602E67B104539FE004CED12 /* Commands_operators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Commands_operators.h; sourceTree = "<group>"; };
 		6602E67C104539FE004CED12 /* Commands_operators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Commands_operators.m; sourceTree = "<group>"; };
 		662C4E45103A1B81003DF4B9 /* Info.template */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Info.template; path = doc/Info.template; sourceTree = "<group>"; };
@@ -70,7 +71,6 @@
 		669B29221042B5EF00864429 /* Testing-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Testing-Info.plist"; sourceTree = "<group>"; };
 		669CE9A910339C0900FDAD13 /* BundlePrincipal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BundlePrincipal.h; sourceTree = "<group>"; };
 		669CE9AA10339C0900FDAD13 /* BundlePrincipal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BundlePrincipal.m; sourceTree = "<group>"; };
-		66F3702E10571C6700D0BAB3 /* Blacklist.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Blacklist.plist; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* vImputManager.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vImputManager.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D2F7E65807B2D6F200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
@@ -132,9 +132,9 @@
 		089C167CFE841241C02AAC07 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				660087AD1057C88F0013DF46 /* Whitelist.plist */,
 				8D5B49B7048680CD000E48DA /* Info.plist */,
 				089C167DFE841241C02AAC07 /* InfoPlist.strings */,
-				66F3702E10571C6700D0BAB3 /* Blacklist.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -310,7 +310,7 @@
 			files = (
 				664140F7103473130017985F /* MainMenu.xib in Resources */,
 				664140F61034730E0017985F /* InfoPlist.strings in Resources */,
-				66F3703010571C6700D0BAB3 /* Blacklist.plist in Resources */,
+				660087AF1057C88F0013DF46 /* Whitelist.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,7 +318,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				66F3702F10571C6700D0BAB3 /* Blacklist.plist in Resources */,
+				660087AE1057C88F0013DF46 /* Whitelist.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,7 +327,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */,
-				66F3703110571C6700D0BAB3 /* Blacklist.plist in Resources */,
+				660087B01057C88F0013DF46 /* Whitelist.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
