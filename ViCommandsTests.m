@@ -1,6 +1,5 @@
 //  Created by Axel on 24.08.09.
 //  Copyright 2009 pqrs.de. All rights reserved.
-//  
 //  xcodebuild -target Testing -configuration Debug  
 
 #import "ViCommandsTests.h"
