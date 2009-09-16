@@ -9,6 +9,10 @@ syntax: regexp
 # no object files in the repo
 \.o$
 
+# documentation stuff
+ex(-|_)vi
+vi-intro
+
 # der Mac- und Xcode-Dreck
 .DS_Store$
 ^vImputManager.xcodeproj/schluete.*
