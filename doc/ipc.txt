@@ -1,0 +1,18 @@
+
+This is a typical "syslog.conf" problem: you must direct "syslog" information 
+for the relevant "facility" and "level" to a destination. Unfortunately, the 
+"facility" name that Apple gives for "launchd" in Tech Note TN2124 is wrong. 
+Instead, I appended a "*.debug" line to my "syslog.conf" file and sent the 
+output to /var/log/debug.log instead.
+
+http://cocoawithlove.com/2009/02/interprocess-communication-snooping.html
+
+- Moeglichkeit 1: NSDistributedNotificationCenter
+
+- Moeglichkeit 2: NSPortNameServer bzw. NSNetService
+
+- Remoteaufrufe auf Objects:
+    id rootObject=
+      [NSConnection rootProxyForConnectionWithRegisteredName:
+        @"PBXProjectWatcherServerConnection-3.1.2" host:nil];
+
