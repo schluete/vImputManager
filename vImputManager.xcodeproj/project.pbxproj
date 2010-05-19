@@ -108,12 +108,12 @@
 			children = (
 				669B28C11042AFE800864429 /* Testing */,
 				08FB77AFFE84173DC02AAC07 /* Classes */,
+				664140D31034701D0017985F /* TestApplication */,
 				32C88E010371C26100C91783 /* Other Sources */,
 				089C167CFE841241C02AAC07 /* Resources */,
 				6697F56510391758007CA72C /* Documentation */,
 				089C1671FE841209C02AAC07 /* Frameworks and Libraries */,
 				19C28FB8FE9D52D311CA2CBB /* Products */,
-				664140D31034701D0017985F /* TestApplication */,
 				664140C910346FEE0017985F /* TestApplication-Info.plist */,
 				669B29221042B5EF00864429 /* Testing-Info.plist */,
 			);
@@ -136,7 +136,7 @@
 				8D5B49B7048680CD000E48DA /* Info.plist */,
 				089C167DFE841241C02AAC07 /* InfoPlist.strings */,
 			);
-			name = Resources;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		08FB77AFFE84173DC02AAC07 /* Classes */ = {
@@ -157,7 +157,7 @@
 				6641409A103454580017985F /* Logger.h */,
 				6641409B103454580017985F /* Logger.m */,
 			);
-			name = Classes;
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		1058C7ACFEA557BF11CA2CBB /* Linked Frameworks */ = {
@@ -225,7 +225,7 @@
 				669B28C21042B00900864429 /* ViCommandsTests.h */,
 				669B28C31042B00900864429 /* ViCommandsTests.m */,
 			);
-			name = Testing;
+			path = Testing;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -431,7 +431,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = vImputManager_Prefix.pch;
-				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
 				PRODUCT_NAME = vImputManager;
 				WRAPPER_EXTENSION = bundle;
@@ -447,7 +447,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = vImputManager_Prefix.pch;
-				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
 				PRODUCT_NAME = vImputManager;
 				WRAPPER_EXTENSION = bundle;
