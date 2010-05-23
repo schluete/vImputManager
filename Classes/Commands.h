@@ -31,6 +31,7 @@ typedef enum _OperatorState {
 @interface Commands: NSObject {
   NSTextView *_textView;
   ViMode _viMode;
+  BOOL _lastKeyWasEscape;
   unichar _currentInput;
   BOOL _waitingForFurtherInput;
   SEL _furtherInputHandler;
@@ -60,6 +61,12 @@ typedef enum _OperatorState {
 // cancel current command
 - (void)escape;
 
+// return true if the last pressed key was an ESCAPE, false otherwise.
+- (BOOL)lastKeyWasEscape;
+
+// clear the ESCAPE key status
+- (void)clearLastKeyWasEscape;
+      
 // process a single input character from the keyboard
 - (void)processInput:(unichar)input;
 

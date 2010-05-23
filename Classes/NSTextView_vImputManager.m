@@ -29,16 +29,6 @@ static NSMutableDictionary *ViCommandProcessors=nil;
   unichar charCode=[chars characterAtIndex:0];
   NSUInteger modifiers=[event modifierFlags];
 
-#if 0
-  // if we got an ESC with the shift key pressed we're 
-  // removing the shift modifier and letting the event
-  // bubble up to restore the original ESC functionality
-  if(charCode==0x1b && (modifiers&NSShiftKeyMask)) {
-    [self vImputManager_originalKeyDown:event];
-    return;
-  }
-#endif
-  
   // every key combination containing the Command key is ignored
   // by the plugin so that the host application can handle this
   if((modifiers & NSCommandKeyMask)>0) {
@@ -56,6 +46,16 @@ static NSMutableDictionary *ViCommandProcessors=nil;
     processor=[[Commands alloc] initWithTextView:self];
     [ViCommandProcessors setObject:processor forKey:myId];
 [Logger log:@"allocated a new processor <%@> for id <%x>",processor,[myId intValue]];
+  }
+                        
+  // if we got two consequetive ESC keypresses we'll let 
+  // the second one bubble up to the original handler. This 
+  // way we're able to escape from ie. the find inputline
+  // or the code sense popup
+  if(charCode==0x1b && [processor lastKeyWasEscape]) {
+    [processor clearLastKeyWasEscape];
+    [self vImputManager_originalKeyDown:event];
+    return;
   }
   
   // if we're not in command mode and the current input isn't 

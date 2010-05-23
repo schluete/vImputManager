@@ -92,6 +92,22 @@
   _currentInput=0;
   _waitingForFurtherInput=FALSE;
   _furtherInputHandler=nil;
+  _lastKeyWasEscape=NO;
+}
+
+/**
+ * return true if the last pressed key was an ESCAPE, false otherwise.
+ */
+- (BOOL)lastKeyWasEscape {
+  return _lastKeyWasEscape;
+}
+
+/**
+ * clear the ESCAPE key status. This is needed if the user pressed ESC
+ * twice to lets the second press bubble up to the caller.
+ */
+- (void)clearLastKeyWasEscape {
+  _lastKeyWasEscape=NO;
 }
 
 /**
@@ -112,8 +128,11 @@
   // Eingabe ab und initialisieren den Command Mode neu
   if(!isControl && input==0x1b) {
     [self escape];
+    _lastKeyWasEscape=YES;
     return;
   }
+  else
+    _lastKeyWasEscape=NO;
 
   // wenn wir nicht im Command-Mode sind brauchen wir den Rest gar nicht
   // erst auszuprobieren, da wir nur mit einem Escape in Selbigen kommen koennen.
