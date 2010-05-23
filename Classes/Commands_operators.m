@@ -18,6 +18,9 @@
   NSRange changeRange=[self determineOperatorRange];
   if(changeRange.location==NSNotFound || changeRange.length<=0)
     return;
+  
+  // we store the changed text into the unnamed register
+  [self storeText:_temporaryBuffer intoRegister:'"'];
 
   // ok, delete the range and go to insert mode
   [_textView setSelectedRange:changeRange];
@@ -35,6 +38,9 @@
   if(deleteRange.location==NSNotFound || deleteRange.length<=0)
     return;
 
+  // we store the changed text into the unnamed register
+  [self storeText:_temporaryBuffer intoRegister:'"'];
+
   // ok, we got a text range to delete
   [_textView setSelectedRange:deleteRange];
   [_textView delete:self];
@@ -51,6 +57,9 @@
   if(yankRange.location==NSNotFound || yankRange.length<=0)
     return;
 
+  // we store the changed text into the unnamed register
+  [self storeText:_temporaryBuffer intoRegister:'"'];
+  
   // ok, we've got a range to yank into the buffer, but the yanking
   // was done by the determineOperatorRange method. So only the move
   // to the originating cursor position is left for us to do.

@@ -4,7 +4,7 @@
 #import <Cocoa/Cocoa.h>
 
 // the possible vi modes the processor is in
-typedef enum _ViMode{
+typedef enum _ViMode {
   Insert=0,
   Command=1,
   Replace=2,
@@ -48,6 +48,7 @@ typedef enum _OperatorState {
   int _operatorStartPos;
 
   NSMutableString *_temporaryBuffer;
+  NSMutableDictionary *_registers;
 }
 
 // constructor, called to set the view we're working on

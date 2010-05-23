@@ -38,6 +38,13 @@ static NSMutableDictionary *ViCommandProcessors=nil;
     return;
   }
 #endif
+  
+  // every key combination containing the Command key is ignored
+  // by the plugin so that the host application can handle this
+  if((modifiers & NSCommandKeyMask)>0) {
+    [self vImputManager_originalKeyDown:event];
+    return;
+  }
 
   // get the command processor for this text view, allocate 
   // a new one if none is currently present for the view.
@@ -50,7 +57,7 @@ static NSMutableDictionary *ViCommandProcessors=nil;
     [ViCommandProcessors setObject:processor forKey:myId];
 [Logger log:@"allocated a new processor <%@> for id <%x>",processor,[myId intValue]];
   }
-
+  
   // if we're not in command mode and the current input isn't 
   // an ESC we're not going to handle this input by ourself
   if([processor viMode]==Command || charCode==0x1b) {

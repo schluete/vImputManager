@@ -11,6 +11,9 @@
 // store the given text into a register
 - (void)storeText:(NSString *)text intoRegister:(unichar)namedRegister;
 
+// return the text from the current register
+- (NSString *)textForCurrentRegister;
+
 // return the current cursor position
 - (NSUInteger)cursorPosition;
 
@@ -125,5 +128,11 @@
 
 // joins together lines
 - (void)joinLines;
+
+// paste the content of a buffer before/ above the current cursor position
+- (void)pasteBefore;
+
+// paste the content of a buffer after/ below the current cursor position
+- (void)pasteAfter;
 
 @end

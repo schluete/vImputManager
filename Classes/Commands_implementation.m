@@ -39,7 +39,22 @@
 - (void)storeText:(NSString *)text intoRegister:(unichar)namedRegister {
   if(namedRegister==0)  // do we have a valid register?
     return;
-  [Logger log:@"register handling for register <%c> is not yet implemented!",namedRegister];
+[Logger log:@"store text <%@> into register <%C>", text, namedRegister];
+  [_registers setValue:text forKey:[NSString stringWithFormat:@"%C", namedRegister]];
+}
+
+/**
+ * return the text from the current named register. If no register name
+ * was given in the command the unnamed register "" will be used. If no 
+ * text was found in the register an empty string gets returned.
+ */
+- (NSString *)textForCurrentRegister {
+  NSString *reg=@"\"";
+  if(_currentNamedRegister) 
+    reg=[NSString stringWithFormat:@"%C", _currentNamedRegister];
+  
+  NSString *text=(NSString *)[_registers objectForKey:reg];
+  return (text ? text:@"");
 }
 
 /**
@@ -502,7 +517,7 @@
     return;
   }
 
-  int crash=*((int *)0x00);
+  [Logger log:@"findCharacterBackward not yet implemented"];
 }
 
 /**
@@ -635,6 +650,53 @@
       [_textView setSelectedRange:NSMakeRange(endOfLine,1)];
     [_textView delete:self];
   }
+}
+
+// paste the content of a buffer before/ above the current cursor position
+- (void)pasteBefore {
+  // get the text to insert
+  NSString *text=[self textForCurrentRegister];
+  if(!text)
+    return;
+  
+  // move the cursor to the correct position depending on the text being multiline or not
+  BOOL isWholeLines=([text rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]].location!=NSNotFound);
+  int startOfLine=[self findStartOfLine:[self cursorPosition]],
+      cursor=[self cursorPosition];
+  if(isWholeLines)
+    cursor=startOfLine;
+  else 
+    if(cursor>0 && cursor>startOfLine)
+      cursor--;
+  
+  // insert the text, then correct the cursor position if needed
+  [self moveCursorTo:cursor];
+  [_textView insertText:text];  
+  if(isWholeLines)
+    [self moveCursorTo:cursor];
+}
+
+// paste the content of a buffer after/ below the current cursor position
+- (void)pasteAfter {
+  // get the text to insert
+  NSString *text=[self textForCurrentRegister];
+  if(!text)
+    return;
+  
+  // move the cursor to the correct position depending on the text being multiline or not
+  BOOL isWholeLines=([text rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]].location!=NSNotFound);
+  int cursor=[self cursorPosition],
+      startOfNextLine=[self findEndOfLine:cursor]+1;
+  if(isWholeLines)
+    cursor=startOfNextLine;
+  else
+    cursor++;
+  
+  // insert the text, then correct the cursor position if needed
+  [self moveCursorTo:cursor];
+  [_textView insertText:text];
+  if(isWholeLines)
+    [self moveCursorTo:startOfNextLine];
 }
 
 @end

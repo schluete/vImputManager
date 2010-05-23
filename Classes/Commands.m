@@ -22,6 +22,7 @@
   [self initializeCommandsTable];
   _countBuffer=[[NSMutableString alloc] initWithCapacity:10];
   _temporaryBuffer=[[NSMutableString alloc] initWithCapacity:10];
+  _registers=[[NSMutableDictionary alloc] initWithCapacity:40];
   [self escape];
 
   _viMode=Insert;
@@ -38,6 +39,7 @@
 - (void)destructor {
   [_countBuffer release];
   [_temporaryBuffer release];
+  [_registers release];
   [_textView release];
 }
 

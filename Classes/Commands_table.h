@@ -159,8 +159,14 @@ struct {
   // joined rather than the default two (6.5, 7.1f). 
   {'J',FALSE,@"joinLines"},
 
-
-
+  // Puts the last deleted text back before/ above the cursor. The text goes back as whole lines above the 
+  // cursor if it was deleted as whole lines. Otherwise the text is inserted between the characters before and 
+  // at the cursor. May be preceded by a named buffer specification "x to retrieve the contents of the buffer; 
+  // buffers 1-9 contain deleted material, buffers a-z are available for general use (6.3). With the small 
+  // letter 'p' text gets inserted after/ below the cursor.
+  {'P', FALSE, @"pasteBefore"},
+  {'p', FALSE, @"pasteAfter"},
+  
   // end-of-list marker, not used as a vi command
   {0,FALSE,nil}
 };
@@ -346,11 +352,6 @@ L   Moves the cursor to the first non-white character of the last line on the sc
 M   Moves the cursor to the middle line on the screen, at the first non-white position on the line (2.3). 
 
 N   Scans for the next match of the last pattern, but in the reverse direction; this is the reverse of <n>. 
-
-P   Puts the last deleted text back before/ above the cursor. The text goes back as whole lines above the 
-    cursor if it was deleted as whole lines. Otherwise the text is inserted between the characters before and 
-    at the cursor. May be preceded by a named buffer specification "x to retrieve the contents of the buffer; 
-    buffers 1-9 contain deleted material, buffers a-z are available for general use (6.3). 
 
 Q   Quits from vi to ex command mode. In this mode, whole lines form commands, ending with a <CR>. One can give 
     all the : commands; the editor supplies the : as a prompt (7.7). 
